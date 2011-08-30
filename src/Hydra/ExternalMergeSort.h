@@ -7,7 +7,7 @@
 
    All rights reserved.
 
-   Object for storing the BamAlignments (N=2) for 
+   Object for storing the BamAlignments (N=2) for
    a readpair mapping combination
 ****************************************************************************/
 #ifndef EXTMERGESORT_H
@@ -44,28 +44,28 @@ template <class T>
 class MERGE_DATA {
 
 public:
-	// data
-	T data;
+    // data
+    T data;
     istream *stream;
     bool (*compFunc)(const T &a, const T &b);
 
-	// constructor
-	MERGE_DATA (const T &data, 
-	            istream *stream, 
-	            bool (*compFunc)(const T &a, const T &b)) 
-	:
-		data(data), 
-		stream(stream),
-		compFunc(compFunc)
-	{}
-	
-	// comparison operator for maps keyed on this structure
-	bool operator < (const MERGE_DATA &a) const
-	{
-        // recall that priority queues try to sort from 
+    // constructor
+    MERGE_DATA (const T &data,
+                istream *stream,
+                bool (*compFunc)(const T &a, const T &b))
+    :
+        data(data),
+        stream(stream),
+        compFunc(compFunc)
+    {}
+
+    // comparison operator for maps keyed on this structure
+    bool operator < (const MERGE_DATA &a) const
+    {
+        // recall that priority queues try to sort from
         // highest to lowest. thus, we need to negate.
         return !(compFunc(data, a.data));
-	}
+    }
 };
 
 
@@ -84,19 +84,19 @@ public:
                  int  maxBufferSize  = 10000,
                  bool compressOutput = false,
                  string tempPath     = "");
-	// destructor
-	~ExtMergeSort(void);
-	
-	// drives the creation of sorted sub-files stored on disk.
+    // destructor
+    ~ExtMergeSort(void);
+
+    // drives the creation of sorted sub-files stored on disk.
     void DivideAndSort();
-    
-    // drives the merging of the sorted temp files. 
+
+    // drives the merging of the sorted temp files.
     // final, sorted and merged output is written to "out".
     void Merge();
-    	
+
 private:
-	string _inFile;
-	bool (*_compareFunction)(const T &a, const T &b);
+    string _inFile;
+    bool (*_compareFunction)(const T &a, const T &b);
     string _tempPath;
     vector<string>    _vTempFileNames;
     vector<ifstream*>  _vTempFiles;
@@ -105,7 +105,7 @@ private:
     bool _compressOutput;
     bool _tempFileUsed;
     ostream *_out;
-    
+
     void WriteToTempFile(const vector<T> &lines);
     void OpenTempFiles();
     void CloseTempFiles();
@@ -124,12 +124,12 @@ ExtMergeSort<T>::ExtMergeSort (const string &inFile,
                                bool (*compareFunction)(const T &a, const T &b),
                                int maxBufferSize,
                                bool compressOutput,
-                               string tempPath) 
-	: _inFile(inFile)
-	, _out(out)
-	, _compareFunction(compareFunction)
-	, _tempPath(tempPath)
-	, _maxBufferSize(maxBufferSize)
+                               string tempPath)
+    : _inFile(inFile)
+    , _out(out)
+    , _compareFunction(compareFunction)
+    , _tempPath(tempPath)
+    , _maxBufferSize(maxBufferSize)
     , _runCounter(0)
     , _compressOutput(compressOutput)
 {}
@@ -137,7 +137,7 @@ ExtMergeSort<T>::ExtMergeSort (const string &inFile,
 
 // destructor
 template <class T>
-ExtMergeSort<T>::~ExtMergeSort(void) 
+ExtMergeSort<T>::~ExtMergeSort(void)
 {}
 
 
@@ -149,59 +149,59 @@ void ExtMergeSort<T>::DivideAndSort() {
     // gzipped
     if ((isGzipFile(_inFile) == true) && (isRegularFile(_inFile) == true)) {
         delete input;
-        input = new igzstream(_inFile.c_str(), ios::in);   
+        input = new igzstream(_inFile.c_str(), ios::in);
     }
 
     // bail unless the file is legit
-	if ( input->good() == false ) {
-		cerr << "Error: The requested input file (" << _inFile << ") could not be opened. Exiting!" << endl;
-		exit (1);
-	}
+    if ( input->good() == false ) {
+        cerr << "Error: The requested input file (" << _inFile << ") could not be opened. Exiting!" << endl;
+        exit (1);
+    }
     vector<T> lineBuffer;
     lineBuffer.reserve(100000);
     unsigned int totalBytes = 0;  // track the number of bytes consumed so far.
 
     // track whether or not we actually had to use a temp
-    // file based on the memory that was allocated 
+    // file based on the memory that was allocated
     _tempFileUsed = false;
-    
+
     // keep reading until there is no more input data
     T line;
     while (*input >> line) {
-        
+
         // add the current line to the buffer
         // and track the memory used.
         lineBuffer.push_back(line);
         totalBytes += sizeof(line);  // buggy?
-        
+
         // sort the buffer and write to a temp file
         // if we have filled up our quota
-	    if (totalBytes > _maxBufferSize) {
+        if (totalBytes > _maxBufferSize) {
             sort(lineBuffer.begin(), lineBuffer.end(), *_compareFunction);
             WriteToTempFile(lineBuffer);
             // clear the buffer for the next run
             lineBuffer.clear();
             _tempFileUsed = true;
             totalBytes = 0;
-	    }
-	}
-	
-	// handle the run (if any) from the last chunk of the input file.
-	if (lineBuffer.empty() == false) {
-	    // write the last "chunk" to the tempfile if
-	    // a temp file had to be used (i.e., we exceeded the memory)
-	    if (_tempFileUsed == true) {
-		    sort(lineBuffer.begin(), lineBuffer.end(), *_compareFunction);
-		    WriteToTempFile(lineBuffer);
-	    }
-	    // otherwise, the entire file fit in the memory given,
-	    // so we can just dumpto stdout.
-	    else {
-	        sort(lineBuffer.begin(), lineBuffer.end(), *_compareFunction);
+        }
+    }
+
+    // handle the run (if any) from the last chunk of the input file.
+    if (lineBuffer.empty() == false) {
+        // write the last "chunk" to the tempfile if
+        // a temp file had to be used (i.e., we exceeded the memory)
+        if (_tempFileUsed == true) {
+            sort(lineBuffer.begin(), lineBuffer.end(), *_compareFunction);
+            WriteToTempFile(lineBuffer);
+        }
+        // otherwise, the entire file fit in the memory given,
+        // so we can just dumpto stdout.
+        else {
+            sort(lineBuffer.begin(), lineBuffer.end(), *_compareFunction);
             for (size_t i = 0; i < lineBuffer.size(); ++i)
                 *_out << lineBuffer[i];
-	    }
-	}
+        }
+    }
 }
 
 
@@ -222,14 +222,14 @@ void ExtMergeSort<T>::WriteToTempFile(const vector<T> &lineBuffer) {
     //else
     output = new ofstream(tempFileName.c_str(), ios::out);
 
-    // write the contents of the current buffer to the temp file    
-    for (size_t i = 0; i < lineBuffer.size(); ++i) 
+    // write the contents of the current buffer to the temp file
+    for (size_t i = 0; i < lineBuffer.size(); ++i)
         *output << lineBuffer[i];
-    
+
     // update the tempFile number and add the tempFile to the list of tempFiles
     ++_runCounter;
     output->close();
-    delete output;    
+    delete output;
     _vTempFileNames.push_back(tempFileName);
 }
 
@@ -244,18 +244,18 @@ void ExtMergeSort<T>::WriteToTempFile(const vector<T> &lineBuffer) {
 //----------------------------------------------------------
 template <class T>
 void ExtMergeSort<T>::Merge() {
-    
+
     // we can skip this step if there are no temp files to
     // merge.  That is, the entire inout file fit in memory
     // and thus we just dumped to stdout.
     if (_tempFileUsed == false)
         return;
-        
-        
-    // open the sorted temp files up for merging. 
+
+
+    // open the sorted temp files up for merging.
     // loads ifstream pointers into _vTempFiles
     OpenTempFiles();
-    
+
     // priority queue for the buffer.
     priority_queue< MERGE_DATA<T> > outQueue;
 
@@ -265,24 +265,24 @@ void ExtMergeSort<T>::Merge() {
         *_vTempFiles[i] >> line;  // overloaded >> for PAIR struct
         outQueue.push( MERGE_DATA<T>(line, _vTempFiles[i], _compareFunction) );
     }
-    
+
     // keep working until the queue is empty
     while (outQueue.empty() == false) {
         // grab the lowest element, print it, then ditch it.
         MERGE_DATA<T> lowest = outQueue.top();
-        
+
         // write the entry from the top of the queue
         // and then delete that entry forever.
         *_out << lowest.data;
         outQueue.pop();
-        
+
         // add the next line from the lowest stream (above) to the queue
         // as long as it's not EOF.
-        *(lowest.stream) >> line;  // overloaded >> for PAIR struct            
+        *(lowest.stream) >> line;  // overloaded >> for PAIR struct
         if (*(lowest.stream))
             outQueue.push( MERGE_DATA<T>(line, lowest.stream, _compareFunction) );
     }
-    
+
     // clean up the gazillion temp files.
     CloseTempFiles();
 }
@@ -290,42 +290,42 @@ void ExtMergeSort<T>::Merge() {
 
 template <class T>
 void ExtMergeSort<T>::OpenTempFiles() {
-	for (size_t i=0; i < _vTempFileNames.size(); ++i) {
-	    
+    for (size_t i=0; i < _vTempFileNames.size(); ++i) {
+
         ifstream *file;
-        
-	    // not gzipped
-	    if ((isGzipFile(_vTempFileNames[i]) == false) && (isRegularFile(_vTempFileNames[i]) == true)) {
-	        file = new ifstream(_vTempFileNames[i].c_str(), ios::in); 
+
+        // not gzipped
+        if ((isGzipFile(_vTempFileNames[i]) == false) && (isRegularFile(_vTempFileNames[i]) == true)) {
+            file = new ifstream(_vTempFileNames[i].c_str(), ios::in);
         }
         // gzipped
         //else if ((isGzipFile(_vTempFileNames[i]) == true) && (isRegularFile(_vTempFileNames[i]) == true)) {
-        //    file = new igzstream(_vTempFileNames[i].c_str(), ios::in);   
+        //    file = new igzstream(_vTempFileNames[i].c_str(), ios::in);
         //}
-        
-		if (file->good() == true) {
-    		// add a pointer to the opened temp file to the list
-    		_vTempFiles.push_back(file);
-		}
-		else {
-		    cerr << "Unable to open temp file (" << _vTempFileNames[i] 
-		         << ").  I suspect a limit on number of open file handles.  Exiting." 
+
+        if (file->good() == true) {
+            // add a pointer to the opened temp file to the list
+            _vTempFiles.push_back(file);
+        }
+        else {
+            cerr << "Unable to open temp file (" << _vTempFileNames[i]
+                 << ").  I suspect a limit on number of open file handles.  Exiting."
                  << endl;
              exit(1);
-		}
-	}
+        }
+    }
 }
 
 
 template <class T>
 void ExtMergeSort<T>::CloseTempFiles() {
-	// delete the pointers to the temp files.
-	for (size_t i=0; i < _vTempFiles.size(); ++i) {
+    // delete the pointers to the temp files.
+    for (size_t i=0; i < _vTempFiles.size(); ++i) {
         _vTempFiles[i]->close();
-		delete _vTempFiles[i];
-	}
-	// delete the temp files from the file system.
-	for (size_t i=0; i < _vTempFileNames.size(); ++i) {
+        delete _vTempFiles[i];
+    }
+    // delete the temp files from the file system.
+    for (size_t i=0; i < _vTempFileNames.size(); ++i) {
         remove(_vTempFileNames[i].c_str());  // remove = UNIX "rm"
     }
 }
@@ -383,18 +383,18 @@ bool isGzipFile(const string& filename) {
 
 
 string stl_basename(const string &path) {
-	string result;
+    string result;
 
-	char* path_dup = strdup(path.c_str());
-	char* basename_part = basename(path_dup);
-	result = basename_part;
-	free(path_dup);
+    char* path_dup = strdup(path.c_str());
+    char* basename_part = basename(path_dup);
+    result = basename_part;
+    free(path_dup);
 
-	size_t pos = result.find_last_of('.');
-	if (pos != string::npos )
-		result = result.substr(0,pos);
+    size_t pos = result.find_last_of('.');
+    if (pos != string::npos )
+        result = result.substr(0,pos);
 
-	return result;
+    return result;
 }
 
 

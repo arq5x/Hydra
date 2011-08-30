@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
     int minSupport        = 2;
     int maxLinkedDistance = 1000000; // 1Mb by default
     int numThreads = 1;
+    int maxMappings = 100000;
     
     vector<DNALIB> sampleLibs;
 
@@ -111,6 +112,13 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+        else if(PARAMETER_CHECK("-maxMappings", 12, parameterLength)) {
+            if ((i+1) < argc) {
+                maxMappings     = atoi(argv[i + 1]);
+                cerr << "  Maximum mappings allowed before \"punting\": " << maxMappings << endl;
+                i++;
+            }
+        }
         else {
             cerr << "*****ERROR: Unrecognized parameter: " << argv[i] << " *****" << endl << endl;
             showHelp = true;
@@ -159,7 +167,7 @@ int main(int argc, char* argv[]) {
         events->LoadRoutedFile(routedFile);
         events->SortAllMasterFilesByPosition_New();
         events->FindPositionClusters_New();
-        events->AssembleClusters();
+        events->AssembleClusters(maxMappings);
 
         return 0;
     }
@@ -189,6 +197,8 @@ void ShowHelp(void) {
     cerr << "  -routed\tA single routed chr/chr/strand/strand file from HydraRouter." << endl << endl;
     
     cerr << "  -out\tStub for the assembled output file." << endl << endl;
+    
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
         
     // end the program here
     exit(1);

@@ -590,7 +590,7 @@ void HydraPE::FindInterClusters(ifstream *sortedMappings, ofstream *clusters, in
  GOAL: Examine each size & pos cluster and choose the best "seed"
        mapping from which to assemble the breakpoint cluster.  
 *********************************************************************/
-void HydraPE::AssembleClusters() {
+void HydraPE::AssembleClusters(int maxMappings) {
 
     cerr << "Assembling raw breakpoint clusters." << endl;            
         
@@ -619,7 +619,7 @@ void HydraPE::AssembleClusters() {
         while (cluster >> mapping) {
             if (mapping.clusterId != prevCluster && prevCluster > 0) {
                 cout << "\tAssembling cluster " <<  prevCluster << " from: " << clusterFile << ".  N= " << clusterMappings.size() << endl;
-                if (clusterMappings.size() <= 100000) {
+                if (clusterMappings.size() <= maxMappings) {
                     Assemble(assembledClusters, clusterMappings, masterClusterId);
                 }
                 // too many mappings. save, but skip it.
@@ -686,15 +686,15 @@ void HydraPE::Assemble(ofstream *assembledClusters, vector<PAIR> &clusterMapping
                                                                                clusterMappings[j],
                                                                                aSpanDev,
                                                                                bSpanDev);
-                if ( haveLengthSupport && haveSpanSupport ) 
-                    support++;  
+                if ( haveLengthSupport && haveSpanSupport )
+                    support++;
             }
         }
         // update the support for this mapping
         clusterMappings[i].support = support;
         totalSupport += support;
     }
-            
+
     //***************************************************************
     // Phase 2.
     // - Sort the mappings by the support computed in Phase 1.

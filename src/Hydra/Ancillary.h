@@ -1,7 +1,7 @@
 /********************************************************************************
 Program: 		Ancillary.h
 Description: 	Ancillary "helper" functions for Hydra data structures.
-					
+
 Author:    		Aaron Quinlan, Ph.D
 				University of Virginia
 				aaronquinlan@gmail.com
@@ -17,7 +17,7 @@ int    getNonOverlap (const PAIR &a, const PAIR &b);
 
 bool   doLengthsSupportOneAnother (const PAIR &a, const PAIR &b, int lengthDev);
 
-bool   doMultiLibraryLengthsSupportOneAnother (const PAIR &a, const PAIR &b, int aLengthDev, int bLengthDev); 
+bool   doMultiLibraryLengthsSupportOneAnother (const PAIR &a, const PAIR &b, int aLengthDev, int bLengthDev);
 
 bool   doSpansSupportOneAnother (const PAIR &a, const PAIR &b, int spanDev);
 
@@ -51,8 +51,8 @@ void   getTotalEditDistance(const pairVector &mappings, int &totalMM1, int &tota
 
 
 void   getTotalNumMappings(const pairVector &mappings, int &totalMappings1, int &totalMappings2);
-	
 
-void   computeSupport(const pairVector &mappings, int &finalSupport, double &finalWeightedSupport, double &allWeightedSupport, 
+
+void   computeSupport(const pairVector &mappings, int &finalSupport, double &finalWeightedSupport, double &allWeightedSupport,
                       int &numUniqueMappers, int &numAnchoredMappers, int &numMultipleMappers);
 

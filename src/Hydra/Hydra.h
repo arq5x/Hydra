@@ -282,7 +282,7 @@ public:
     void FindPositionClusters_New();
     
     // assemble frag/pos clusters into putative breakpoint calls.
-    void AssembleClusters();
+    void AssembleClusters(int maxMappings);
     
     //void AllowOneClusterPerPair();
     
@@ -309,6 +309,7 @@ private:
     vector<int>    _variances;
     vector<int>    _degreesOfVariance;
     int            _memory;
+    int            _maxMappings;
     
     vector<DNALIB> _libraries;
 

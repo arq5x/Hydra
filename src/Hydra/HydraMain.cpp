@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
     int minSupport        = 2;
     int maxLinkedDistance = 1000000; // 1Mb by default
     int numThreads = 1;
+    int maxMappings = 100000;
     
     // TAB-separated configuration file listing the samples, files and their statistics.
     // 1. sample ID (string)
@@ -161,6 +162,13 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+        else if(PARAMETER_CHECK("-maxMappings", 12, parameterLength)) {
+            if ((i+1) < argc) {
+                maxMappings     = atoi(argv[i + 1]);
+                cerr << "  Maximum mappings allowed before \"punting\": " << maxMappings << endl;
+                i++;
+            }
+        }
         else if(PARAMETER_CHECK("-is", 3, parameterLength)) {
             ignoreSize = true;
             cerr << "  Break cluster ties based on edit distance instead of size. " << endl;
@@ -243,20 +251,20 @@ int main(int argc, char* argv[]) {
             //events->RemoveFragSizeClusterFiles();
             events->FindPositionClusters_New();
             //events->RemovePositionSortedFiles();
-            events->AssembleClusters();
+            events->AssembleClusters(maxMappings);
         }
         else if (haveRoutedFiles == true && havePosSortedFiles == false) {
             // sort, cluster and assemble
             events->LoadRoutedFileList(routedFiles);
             events->SortAllMasterFilesByPosition_New();
             events->FindPositionClusters_New();
-            events->AssembleClusters();
+            events->AssembleClusters(maxMappings);
         }
         else if (haveRoutedFiles == false && havePosSortedFiles == true) {
             // cluster and assemble
             events->LoadPosSortedFileList(posSortedFiles);
             events->FindPositionClusters_New();
-            events->AssembleClusters();
+            events->AssembleClusters(maxMappings);
         }
         return 0;
     }
@@ -308,6 +316,8 @@ void ShowHelp(void) {
     cerr << "  \t\tDefault." << endl;
     cerr << "  \t\"all\"\tUse all mappings for each pair." << endl;
     cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl;
+    
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
     
     // end the program here
     exit(1);
