@@ -15,22 +15,13 @@ export CXX ?= g++
 
 
 # define our source subdirectories
-SUBDIRS = $(SRC_DIR)/Hydra-PE $(SRC_DIR)/BamPairMeister
-
-#SUBDIRS = $(SRC_DIR)/Hydra-PE $(SRC_DIR)/BamPairMeister $(SRC_DIR)/BamSetProperPairs $(SRC_DIR)/BamToFastq $(SRC_DIR)/BamToFasta $(SRC_DIR)/BamToHydra
-UTIL_SUBDIRS =  $(SRC_DIR)/common/BamTools $(SRC_DIR)/common/BamPair $(SRC_DIR)/common/Utilities
+SUBDIRS = $(SRC_DIR)/Hydra
 
 all:
 
 	@echo "Building Hydra suite:"
 	@echo "========================================================="
 	
-	@for dir in $(UTIL_SUBDIRS); do \
-		echo "- Building in $$dir"; \
-		$(MAKE) --no-print-directory -C $$dir; \
-		echo ""; \
-	done
-
 	@for dir in $(SUBDIRS); do \
 		echo "- Building in $$dir"; \
 		$(MAKE) --no-print-directory -C $$dir; \
