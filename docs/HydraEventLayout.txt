@@ -1,0 +1,25 @@
+* 1. contigId
+2. chrom1 
+3. chrom2
+* 4. minStart1
+* 5. maxEnd1
+* 6. minStart2
+* 7. maxEnd2
+8. strand1
+9. strand2
+10. contigSize
+11. meanMM1 
+12. meanMM2
+13. meanMappings1
+14. meanMappings2
+15. meanQual1
+16. meanQual2
+* 17. numPairs
+* 18. allWeightedSupport
+* 19. finalSupport
+* 20. finalWeightedSupport
+* 21. Distinct Pairs
+22. numUniq
+23. numAnch
+24. numMult
+25. numRefMappers (Added after megablasting)

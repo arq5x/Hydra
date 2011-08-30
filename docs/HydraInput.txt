@@ -1,0 +1,12 @@
+1. chrom1
+2. start1
+3. end1
+4. chrom2
+5. start2
+6. end2
+7. name
+8. to which end of the pair do fields 1,2,3,9,11 correspond? (1 or 2)
+9. strand1
+10. strand2
+11. editDistance1
+12. editDistance2

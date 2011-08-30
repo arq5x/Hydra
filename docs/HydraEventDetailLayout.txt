@@ -1,0 +1,49 @@
+1. contigId 
+2. id1
+3. mate1
+4. chrom1
+5. pos1
+6. strand1
+7. mm1 
+8. qSum1 
+9. subLoc1 
+10. indelLoc1
+11. numMappings1 
+12. id2
+13. mate2
+14. chrom2
+15. pos2
+16. strand2
+17. mm2
+18. qSum2
+19. subLoc2
+20. indelLoc2
+21. numMappings2
+22. fragSize
+23. totalMM
+24. totalQual
+25. numRefMappings
+26. mappingType        //const char UNIQ_TYPE = 1;
+					   //const char ANCH_TYPE = 2;
+                       //const char MULT_TYPE = 3;
+
+
+
+// NEW
+1. chrom1
+2. start1
+3. end1
+4. chrom2
+5. start2
+6. end2
+7. name
+8. to which end of the pair do fields 1,2,3,9,11 correspond? (1 or 2)
+9. strand1
+10. strand2
+11. edit distance for end 1
+12. edit distance for end 2
+13. number of mappings for end 1
+14. number of mappings for end 2
+15. mapping type
+16. was this pair ultimately included in this breakpoint?
+17. breakpoint id.
