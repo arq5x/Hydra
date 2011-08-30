@@ -18,6 +18,8 @@ export CXX ?= g++
 SUBDIRS = $(SRC_DIR)/Hydra
 
 all:
+	[ -d $(OBJ_DIR) ] || mkdir -p $(OBJ_DIR)
+	[ -d $(BIN_DIR) ] || mkdir -p $(BIN_DIR)
 
 	@echo "Building Hydra suite:"
 	@echo "========================================================="
