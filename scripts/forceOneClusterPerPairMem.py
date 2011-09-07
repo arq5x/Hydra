@@ -466,9 +466,9 @@ def main():
         print
     else:
         clusterSupport    = computeSupportForEachCluster(opts.master, opts.maxDist)
-        readSortedFile    = sortClusterFileByReadId(opts.master, opts.sortMemory)       
+        readSortedFile    = sortClusterFileByReadId(opts.master, sortMemory)
         updatedFile       = chooseBestClusterForReads(readSortedFile, clusterSupport)
-        clusterSortedFile = sortUpdatedFileByClusterId(updatedFile, opts.sortMemory)
+        clusterSortedFile = sortUpdatedFileByClusterId(updatedFile, sortMemory)
         createMasterAndDetailFiles(clusterSortedFile, opts.outStub)
         
         # clean up the temp files.
@@ -477,7 +477,7 @@ def main():
         cmd = 'rm ' + updatedFile
         (status, output) = commands.getstatusoutput(cmd)
         cmd = 'rm ' + clusterSortedFile
-        #(status, output) = commands.getstatusoutput(cmd)        
+        (status, output) = commands.getstatusoutput(cmd)
             
 if __name__ == "__main__":
     main()
