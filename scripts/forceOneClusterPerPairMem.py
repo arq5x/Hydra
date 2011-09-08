@@ -364,7 +364,7 @@ def reportCluster(mappings, contigId, final, all, detail):
         contigId += 1;
 
         all.write("\t".join([mappings[0].chrom1, str(minStart1), str(maxEnd1), mappings[0].chrom2, str(contigId), 
-                              str(numFinalUniques), mappings[0].strand1, mappings[0].strand2, str(meanMM1), str(meanMM2), 
+                              str(finalSupport), mappings[0].strand1, mappings[0].strand2, str(meanMM1), str(meanMM2), 
                               str(meanMappings1), str(meanMappings2), str(contigSize), str(numMappings), str(allWeightedSupport), 
                               str(finalSupport), str(finalWeightedSupport), str(numUniqueMappers), str(numAnchoredMappers), 
                               str(numMultipleMappers)]) + "\n")
@@ -373,7 +373,7 @@ def reportCluster(mappings, contigId, final, all, detail):
         if (numFinalUniques >= 2):
             final.write("\t".join([mappings[0].chrom1, str(minStart1), str(maxEnd1), 
                                     mappings[0].chrom2, str(minStart2), str(maxEnd2),
-                                    str(contigId), str(numFinalUniques), mappings[0].strand1, 
+                                    str(contigId), str(finalSupport), mappings[0].strand1, 
                                     mappings[0].strand2, str(meanMM1), str(meanMM2), 
                                     str(meanMappings1), str(meanMappings2), str(contigSize), str(numMappings), 
                                     str(allWeightedSupport), str(finalSupport), str(finalWeightedSupport), 

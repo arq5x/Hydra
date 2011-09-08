@@ -340,15 +340,15 @@ def mergeBreakpointsWithSorting(finalFile, slop, sortMethod):
     prev = HYDRA_FINAL([])
     set  = []
 
-    cmd = 'sort -k9,9 -k10,10 -k2,2n -S 2G ' + finalFile # default to sort by start (assumes already sorted by chr/chr)
+    cmd = 'LC_ALL=C sort -k9,9 -k10,10 -k2,2n ' + finalFile # default to sort by start (assumes already sorted by chr/chr)
     if (sortMethod == "sortByEnd"):
-        cmd = 'sort -k9,9 -k10,10 -k5,5n -S 2G ' + finalFile # default to sort by start (assumes already sorted by chr/chr)
+        cmd = 'LC_ALL=C sort -k9,9 -k10,10 -k5,5n ' + finalFile # default to sort by start (assumes already sorted by chr/chr)
 
     sortedFile = os.popen(cmd)
     somethingMerged = False
 
     # make a new final file.
-    outputFile = finalFile + "." + sortMethod
+    outputFile = "." + finalFile + "." + sortMethod
     output = open(outputFile, 'w')
     prevOverlap = False
     for line in sortedFile:
@@ -393,7 +393,7 @@ def mergeBreakpointsWithPairToPair(finalFile, slop, round):
     cmd = 'pairToPair -rdn -a ' + finalFile + ' -b ' + finalFile + ' -slop ' + str(slop)
     p2p = os.popen(cmd)
     # make a new final file.
-    outputFile = finalFile + ".p2p"
+    outputFile = "." + finalFile + ".p2p"
     output = open(outputFile, 'w')
 
     somethingMerged = False
@@ -478,41 +478,38 @@ def main():
         mergingDone = True
         finalInput = opts.final
         mergeByStartAndEnd = None
+        tempFiles = []
 
         # Phase 1. Merge by sorting
-        while (mergingDone == True):
+        while (mergingDone == True and round <= 20):
             (mergeByStart, mergedByStart)       = mergeBreakpointsWithSorting(finalInput,  opts.maxDist,  "sortByStart")
             (mergeByStartAndEnd, mergedByEnd)   = mergeBreakpointsWithSorting(mergeByStart, opts.maxDist, "sortByEnd")
-            if (round > 0):
-                os.remove(finalInput)
             # Was merging done in either case?  If so, we want to resort and try again.
             mergingDone = (mergedByStart or mergedByEnd)
             if mergingDone:
                 round += 1
-                finalInput = opts.final + "." +  str(round)
+                finalInput = "." + opts.final + "." +  str(round)
                 shutil.copy(mergeByStartAndEnd, finalInput)
-                # cleanup temp files.
-                os.remove(mergeByStart)
-                os.remove(mergeByStartAndEnd)
+            tempFiles.append(finalInput)
+            tempFiles.append(mergeByStart)
+            tempFiles.append(mergeByStartAndEnd)
 
         # Phase 2. Merge by pairing
         mergingDone = True
         mergeByP2P = None
-        os.remove(mergeByStart)
         finalInput = mergeByStartAndEnd
         while (mergingDone == True):
             (mergeByP2P, mergingDone) = mergeBreakpointsWithPairToPair(finalInput,  opts.maxDist, round)
             if mergingDone:
-                if (round > 0):
-                    os.remove(finalInput)
                 round += 1
-                finalInput = opts.final + "." +  str(round)
+                finalInput = "." + opts.final + "." +  str(round)
                 shutil.copy(mergeByP2P, finalInput)
-                os.remove(mergeByP2P)
+            tempFiles.append(finalInput)
+            tempFiles.append(mergeByP2P)
 
+        # Phase 3. Remap the final and detail files
         mergedFinal  = opts.outStub + ".final"
         mergeMapping = opts.outStub + ".mergemap"
-
         final = open(mergedFinal, 'w')
         mmap  = open(mergeMapping, 'w')
 
@@ -543,7 +540,7 @@ def main():
         mergedDetail = opts.outStub + ".detail"
         detail = open(mergedDetail, 'w')
         for line in open(opts.detail, 'r'):
-            lineList = line.strip().split()
+            lineList = line.strip().split("\t")
 
             # only replace the id if it ever made it to the ".final" file.
             # i.e., we don't care about "N" mappings, just "Y"
@@ -551,22 +548,28 @@ def main():
             # fact that I mistakenly wrote breakpoints with insufficient final support
             # to the detail file.  This check will correct this problem.
             oldId = lineList[16]
-
-            if oldId in oldToNew:
-                if lineList[15] == "Y":
-                    newId = oldToNew[oldId]
-                    lineList[16] = newId
-                    detail.write("\t".join(lineList))
-                else:
-                    detail.write("\t".join(lineList))
-                detail.write("\n")
-            else:
-                print oldId, "not in set"
+            newId = oldToNew[oldId]
+            lineList[16] = newId
+            detail.write("\t".join(lineList))
+            detail.write("\n")
+            # if oldId in oldToNew:
+            #     
+            #     if lineList[15] == "Y":
+            #         newId = oldToNew[oldId]
+            #         lineList[16] = newId
+            #         detail.write("\t".join(lineList))
+            #     else:
+            #         detail.write("\t".join(lineList))
+            #     detail.write("\n")
+            # else:
+            #     print oldId, "not in set"
         detail.close()
         
-        # cleanup temp files and exit
-        os.remove(mergeByP2P)
-        os.remove(finalInput)
+        for tmp in tempFiles:
+            # cleanup temp files and exit
+            if os.path.exists(tmp):
+                os.remove(tmp)
+        
         print "Finished."
 
 if __name__ == "__main__":
