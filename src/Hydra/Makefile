@@ -14,16 +14,20 @@ INCLUDES =
 # ----------------------------------
 # define our source and object files
 # ----------------------------------
-SOURCES= HydraMain.cpp HydraAssemblerMain.cpp Hydra.cpp Sort.cpp Ancillary.cpp gzstream.cpp
+SOURCES= HydraRouterMain.cpp HydraMain.cpp HydraAssemblerMain.cpp Hydra.cpp Sort.cpp Ancillary.cpp gzstream.cpp
 OBJECTS= $(SOURCES:.cpp=.o)
 _EXT_OBJECTS=
 EXT_OBJECTS=$(patsubst %,$(OBJ_DIR)/%,$(_EXT_OBJECTS))
 BUILT_OBJECTS= $(patsubst %,$(OBJ_DIR)/%,$(OBJECTS))
 PROGRAM= hydra-ext
 
-all: hydra-ext hydra-assembler
+all: hydra-ext hydra-assembler hydra-router
 
 .PHONY: all
+
+hydra-router: $(OBJ_DIR)/HydraRouterMain.o $(OBJ_DIR)/Hydra.o $(OBJ_DIR)/Sort.o $(OBJ_DIR)/Ancillary.o $(OBJ_DIR)/gzstream.o
+	@echo "  * linking hydra-router"
+	@$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $(BIN_DIR)/$@ $^ $(LIBS)
 
 hydra-assembler: $(OBJ_DIR)/HydraAssemblerMain.o $(OBJ_DIR)/Hydra.o $(OBJ_DIR)/Sort.o $(OBJ_DIR)/Ancillary.o $(OBJ_DIR)/gzstream.o
 	@echo "  * linking hydra-assembler"

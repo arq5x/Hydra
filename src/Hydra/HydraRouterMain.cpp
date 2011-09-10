@@ -103,94 +103,6 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
-        else if(PARAMETER_CHECK("-mem", 4, parameterLength)) {
-            if ((i+1) < argc) {
-                cerr << "  Memory (-mem): " << atoi(argv[i + 1]) << " Gb." << endl;
-                // convert to bytes.
-                memory = (int) (atoi(argv[i + 1]) * pow(2,30));
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-t", 2, parameterLength)) {
-            if ((i+1) < argc) {
-                cerr << "  Num. threads (-t): " << atoi(argv[i + 1]) << endl;
-                // convert to bytes.
-                numThreads = atoi(argv[i + 1]);
-                //omp_set_num_threads(numThreads);
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-out", 4, parameterLength)) {
-            if ((i+1) < argc) {
-                haveOutFile = true;
-                outFile = argv[i + 1];
-                cerr << "  Summary breakpoint output file (-out): " << outFile << endl;
-                cerr << "  Detailed breakpoint output file: " << outFile << ".detail" << endl;
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-routedFiles", 12, parameterLength)) {
-            if ((i+1) < argc) {
-                haveRoutedFiles = true;
-                routedFiles = argv[i + 1];
-                cerr << "  Using already-routed files list in: " << routedFiles << endl;
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-posSortedFiles", 15, parameterLength)) {
-            if ((i+1) < argc) {
-                havePosSortedFiles = true;
-                posSortedFiles = argv[i + 1];
-                cerr << "  Using position clusters files list in: " << posSortedFiles << endl;
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-ms", 3, parameterLength)) {
-            if ((i+1) < argc) {
-                haveMinSupport = true;
-                minSupport = atoi(argv[i + 1]);
-                cerr << "  Minimum number of supporting pairs (-ms): " << minSupport << endl;
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-lnk", 4, parameterLength)) {
-            if ((i+1) < argc) {
-                haveMaxLinkedDistance = true;
-                maxLinkedDistance = atoi(argv[i + 1]);
-                cerr << "  Maximum intrachromosomal distance before unlinked (-maxIntra): " << maxLinkedDistance << endl;
-                i++;
-            }
-        }
-        else if(PARAMETER_CHECK("-is", 3, parameterLength)) {
-            ignoreSize = true;
-            cerr << "  Break cluster ties based on edit distance instead of size. " << endl;
-        }
-        else if(PARAMETER_CHECK("-li", 3, parameterLength)) {
-            lumpInversions = true;
-            cerr << "  Combine +/+ and -/- mappings when finding inversions. " << endl;
-        }
-        else if(PARAMETER_CHECK("-use", 4, parameterLength)) {
-            
-            if ((i+1) < argc) {
-                string useValue = argv[i + 1];
-                if (useValue == "best") {
-                    mappingUsage = "best";
-                    editBeyondBest = 0;
-                    cerr << "  Using *best* mappings." << endl;
-                }
-                else if (useValue == "all") {
-                    mappingUsage = "all";
-                    editBeyondBest = INT_MAX;
-                    cerr << "  Using *all* mappings." << endl;
-                }
-                else if ( IsNumber(useValue) ) {
-                    mappingUsage = "withinBest";
-                    editBeyondBest = atoi(useValue.c_str());
-                    cerr << "  Using all mappings within " << editBeyondBest << "edits of best." << endl;                   
-                }
-                i++;
-            }
-        }
         else {
             cerr << "*****ERROR: Unrecognized parameter: " << argv[i] << " *****" << endl << endl;
             showHelp = true;
@@ -199,10 +111,6 @@ int main(int argc, char* argv[]) {
 
     if (!haveConfigFile) {
         cerr << "*****ERROR: You must specify an input configuration file.*****" << endl << endl;
-        showHelp = true;
-    }
-    if (!haveOutFile) {
-        cerr << "*****ERROR: You must specify an output file.*****" << endl << endl;
         showHelp = true;
     }
 
@@ -249,7 +157,7 @@ void ShowHelp(void) {
 
     cerr << "Summary: Calls SV breakpoints from discordant paired-end mappings." << endl << endl;
 
-    cerr << "Usage:   " << PROGRAM_NAME << " [OPTIONS] -in FILE1 FILE2 ... FILEn -out <breakpoints> -mld <bp> -mno <bp>" << endl << endl;
+    cerr << "Usage:   " << PROGRAM_NAME << " -config" << endl << endl;
 
     cerr << "Options:" << endl;
     cerr << "  -config\tConfiguration file." << endl;
@@ -259,7 +167,6 @@ void ShowHelp(void) {
     cerr << "       \t\tCol 4. Variance (integer)" << endl;
     cerr << "       \t\tCol 5. Num. variances (integer)" << endl << endl;
 
-    cerr << "  -out\tStub for output files." << endl << endl;
 
     // end the program here
     exit(1);
