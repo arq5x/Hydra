@@ -59,13 +59,11 @@ int main(int argc, char* argv[]) {
     bool showHelp          = false;
 
     // output files
-    string outFile;
     string configFile;
     string routedFile;
     
     // checks for existence of parameters
-    bool haveConfigFile         = false;    
-    bool haveOutFile            = false;
+    bool haveConfigFile         = false;
     bool haveRoutedFile         = false;
     
 
@@ -97,13 +95,6 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
-        else if(PARAMETER_CHECK("-out", 4, parameterLength)) {
-            if ((i+1) < argc) {
-                haveOutFile = true;
-                outFile = argv[i + 1];
-                i++;
-            }
-        }
         else if(PARAMETER_CHECK("-routed", 7, parameterLength)) {
             if ((i+1) < argc) {
                 haveRoutedFile = true;
@@ -127,10 +118,6 @@ int main(int argc, char* argv[]) {
 
     if (!haveConfigFile) {
         cerr << "*****ERROR: You must specify an input configuration file.*****" << endl << endl;
-        showHelp = true;
-    }
-    if (!haveOutFile) {
-        cerr << "*****ERROR: You must specify an output file.*****" << endl << endl;
         showHelp = true;
     }
     if (!haveRoutedFile) {
@@ -195,9 +182,7 @@ void ShowHelp(void) {
     cerr << "       \t\tCol 5. Num. variances (integer)" << endl << endl;
     
     cerr << "  -routed\tA single routed chr/chr/strand/strand file from HydraRouter." << endl << endl;
-    
-    cerr << "  -out\tStub for the assembled output file." << endl << endl;
-    
+        
     cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
         
     // end the program here
