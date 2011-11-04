@@ -38,7 +38,7 @@ const short MULT_TYPE = 3;
 
 const int BUFFER_SIZE = 5000000;
 
-// Main stuctur for reading input BEDPE records.
+// Main stucture for reading input BEDPE records.
 struct CORE_PAIR {
     string readId;                		// the read id.
 
