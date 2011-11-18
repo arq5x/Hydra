@@ -57,8 +57,8 @@ struct CORE_PAIR {
             >> p.chrom2    >> p.start2            >> p.end2
             >> p.readId    >> p.whichMateIsBlock1
             >> p.strand1   >> p.strand2
-            >> p.edit1     >> p.edit2;
-            >> p.mappings1 >> p.mappings2;
+            >> p.edit1     >> p.edit2
+            >> p.mappings1 >> p.mappings2
             >> p.mapq1     >> p.mapq2;
         return is;
     }
@@ -257,7 +257,8 @@ public:
     // constructor
     HydraPE(vector<DNALIB> libraries, int minSupport,
             int maxLinkedDistance, bool ignoreSize,
-            bool lumpInversions, string mappingUsage, int editBeyondBest, int memory);
+            bool lumpInversions, string mappingUsage, int editBeyondBest, 
+            int memory, bool useGivenMappings);
 
     // destructor
     ~HydraPE(void);
@@ -315,6 +316,7 @@ private:
     vector<int>    _degreesOfVariance;
     int            _memory;
     int            _maxMappings;
+    bool           _useGivenMappings;
 
     vector<DNALIB> _libraries;
 
@@ -347,6 +349,7 @@ private:
 
     // private methods
     void CullMappingsByMisMatches(pairVector &mappings);
+    void CullMappingsByMisMatches_UsingGivenMappingNumbers (pairVector &pairMappings);
     void CorrectMateOrder(CORE_PAIR &pair);
     void SwapEnds(CORE_PAIR &pair);
     void AddMappingsToMasterMap(const pairVector &mappings);

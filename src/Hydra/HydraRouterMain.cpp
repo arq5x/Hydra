@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
     bool haveMaxLinkedDistance  = false;
     bool lumpInversions         = false;
     bool ignoreSize             = false;
+    bool useGivenMappings            = false;
 
     string mappingUsage         = "best";
     unsigned int editBeyondBest = 0;
@@ -102,6 +103,9 @@ int main(int argc, char* argv[]) {
                 cerr << "  Configuration file (-config): " << configFile << endl;
                 i++;
             }
+        }
+        else if(PARAMETER_CHECK("-useMappings", 12, parameterLength)) {
+            useGivenMappings = true;
         }
         else {
             cerr << "*****ERROR: Unrecognized parameter: " << argv[i] << " *****" << endl << endl;
@@ -137,8 +141,8 @@ int main(int argc, char* argv[]) {
         }
         
         HydraPE *events = new HydraPE(sampleLibs, minSupport,
-                                                maxLinkedDistance, ignoreSize, lumpInversions,
-                                                mappingUsage, editBeyondBest, memory);
+                                      maxLinkedDistance, ignoreSize, lumpInversions,
+                                      mappingUsage, editBeyondBest, memory, useGivenMappings);
         
         cerr << "  Routing discordant mappings to master chrom/chrom/strand/strand files." << endl;  
         events->RouteDiscordantMappings();
@@ -167,6 +171,7 @@ void ShowHelp(void) {
     cerr << "       \t\tCol 4. Variance (integer)" << endl;
     cerr << "       \t\tCol 5. Num. variances (integer)" << endl << endl;
 
+    cerr << "  -useMappings\tDon't count mappings, use the num_mappings fields." << endl << endl;
 
     // end the program here
     exit(1);

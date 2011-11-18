@@ -1,4 +1,4 @@
 // hydra version
 #include <string>
 
-const std::string VERSION = "0.5.4";
+const std::string VERSION = "0.5.5";

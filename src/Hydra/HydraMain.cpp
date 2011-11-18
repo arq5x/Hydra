@@ -238,7 +238,7 @@ int main(int argc, char* argv[]) {
 		
         HydraPE *events = new HydraPE(sampleLibs, minSupport,
                                                 maxLinkedDistance, ignoreSize, lumpInversions,
-                                                mappingUsage, editBeyondBest, memory);
+                                                mappingUsage, editBeyondBest, memory, true);
         
         if (haveRoutedFiles == false && havePosSortedFiles == false) {
             cerr << "  Routing discordant mappings to master chrom/chrom/strand/strand files." << endl;  

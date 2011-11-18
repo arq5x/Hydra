@@ -16,7 +16,8 @@ Author:         Aaron Quinlan, Ph.D
 // make
 HydraPE::HydraPE(vector<DNALIB> libraries, 
                  int minSupport, int maxLinkedDistance, bool ignoreSize, 
-                 bool lumpInversions, string mappingUsage, int editBeyondBest, int memory) 
+                 bool lumpInversions, string mappingUsage, int editBeyondBest, 
+                 int memory, bool useGivenMappings) 
 : _libraries(libraries)
 , minSupport(minSupport)
 , maxLinkedDistance(maxLinkedDistance)
@@ -25,6 +26,7 @@ HydraPE::HydraPE(vector<DNALIB> libraries,
 , mappingUsage(mappingUsage)
 , editBeyondBest(editBeyondBest)
 , _memory(memory)
+, _useGivenMappings(useGivenMappings)
 {}
 
 
@@ -154,7 +156,11 @@ void HydraPE::RouteFile(const string &file, int fileNum) {
         
             // reduce the mappings for this pair to those with the least
             // edit distance and add the remaning mappings to
-            CullMappingsByMisMatches(currReadMappings);
+            if (_useGivenMappings == false)
+                CullMappingsByMisMatches(currReadMappings);
+            else
+                CullMappingsByMisMatches_UsingGivenMappingNumbers(currReadMappings);
+        
             buffer.push_back(currReadMappings);
             
             if (buffer.size() == BUFFER_SIZE) {
@@ -172,7 +178,10 @@ void HydraPE::RouteFile(const string &file, int fileNum) {
         prevRead = currRead;
     }
     // add the best mappings for the last pair in the file.
-    CullMappingsByMisMatches(currReadMappings);
+    if (_useGivenMappings == false)
+        CullMappingsByMisMatches(currReadMappings);
+    else
+        CullMappingsByMisMatches_UsingGivenMappingNumbers(currReadMappings);
     // add the mappings to the appropriate chrom/chrom/strand/strand file
     buffer.push_back(currReadMappings);
     AddMappingsToMasterFile(buffer);
@@ -205,6 +214,7 @@ void HydraPE::LoadRoutedFile(const string &routedFile) {
     _masterChromStrandFileTypes[routedFile]       = intra; 
 }
 
+
 void HydraPE::LoadRoutedFileList(const string &routedFiles) {
     ifstream routed(routedFiles.c_str(), ios::in);
     string file;
@@ -216,12 +226,14 @@ void HydraPE::LoadRoutedFileList(const string &routedFiles) {
     }
 }
 
+
 void HydraPE::LoadPosSortedFileList(const string &sortedFiles) {
     ifstream sorted(sortedFiles.c_str(), ios::in);
     string file;
     while (sorted >> file)
         _posSortFiles.push_back(file);
 }
+
 
 void HydraPE::LoadPosClusterFileList(const string &posClusterFiles) {
     ifstream clusters(posClusterFiles.c_str(), ios::in);
@@ -1061,3 +1073,58 @@ void HydraPE::CullMappingsByMisMatches(pairVector &pairMappings) {
         pairIter->core.mappings2 = end2Size;
     }       
 }
+
+
+void HydraPE::CullMappingsByMisMatches_UsingGivenMappingNumbers (pairVector &pairMappings) {
+
+    short mapType;    
+    unsigned short minMM = USHRT_MAX;
+    int totalMM;
+
+    // Figure out what type of pair this is based on the alignments.    
+    // loop through the mappings and track the minimum edit
+    // distance observed for any one mapping.  this minimum
+    // is the standard for all other mappings.  
+    pairVector::const_iterator mapIter = pairMappings.begin();
+    pairVector::const_iterator mapEnd = pairMappings.end();
+    
+    int end1Mappings = mapIter->core.mappings1;
+    int end2Mappings = mapIter->core.mappings2;
+    for (; mapIter != mapEnd; ++mapIter) {
+        // does this mapping have the least mismatches?
+        totalMM = getTotalMM(*mapIter);
+        if (totalMM < minMM)
+            minMM = totalMM;
+    }   
+
+    // determine what type of PEM it is based on the 
+    // number of mappings for the two ends.
+    if ((end1Mappings == 1) && (end2Mappings == 1))
+        mapType = UNIQ_TYPE;
+    else if ((end1Mappings == 1) || (end2Mappings == 1))
+        mapType = ANCH_TYPE;
+    else
+        mapType = MULT_TYPE;
+
+    // sort the reads so the mappings with the least mismatches are at the "top"                                                                                                                                                    
+    sort(pairMappings.begin(), pairMappings.end(), byTotalMM);
+                                                                                                                                        
+    // default to assuming we want to use just the best mappings
+    // "withinBest" = allow up to editBeyondBest edits worse than minMM
+    // "all" = we don't want to delete anything.
+    int editDistanceCutoff = minMM;
+    if (this->mappingUsage == "withinBest") 
+        editDistanceCutoff = minMM + editBeyondBest;
+    else if (this->mappingUsage == "all")
+        editDistanceCutoff = INT_MAX;
+    
+    vector<PAIR>::iterator mappingsIter = pairMappings.begin();
+    while ((mappingsIter != pairMappings.end()) && (getTotalMM(*mappingsIter) <= editDistanceCutoff)) {
+        mappingsIter->mappingType = mapType; // set the mapping type for all of the mappings within the edit distance cutoff
+        mappingsIter++;
+    }
+    
+    // ditch all but the least mm set.
+    pairMappings.erase(mappingsIter, pairMappings.end());
+}
+
