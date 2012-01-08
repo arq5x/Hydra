@@ -2,7 +2,6 @@
 import sys
 import os
 import commands
-import sqlite3
 from optparse import OptionParser
 
 
@@ -36,13 +35,15 @@ class READ_TO_CLUSTER (object):
             self.edit2                 = int(lineList[11])
             self.mappings1             = int(lineList[12])
             self.mappings2             = int(lineList[13])
-            self.mappingType           = int(lineList[14])
-            self.diffFromExpectedSize  = int(lineList[15]) 
-            self.support               = lineList[16]
-            self.clusterId             = lineList[17]
-            self.used                  = lineList[18]
-            self.include               = lineList[19]
-            self.fileNum               = lineList[20]
+            self.mapq1                 = int(lineList[14])
+            self.mapq2                 = int(lineList[15])
+            self.mappingType           = int(lineList[16])
+            self.diffFromExpectedSize  = int(lineList[17]) 
+            self.support               = lineList[18]
+            self.clusterId             = lineList[19]
+            self.used                  = lineList[20]
+            self.include               = lineList[21]
+            self.fileNum               = lineList[22]
         else:
             self.valid = 0
             
@@ -51,7 +52,7 @@ class READ_TO_CLUSTER (object):
                              self.chrom2, str(self.start2), str(self.end2),
                              self.readId, str(self.whichMateIsBlock1), self.strand1, self.strand2,
                              str(self.edit1), str(self.edit2), str(self.mappings1), str(self.mappings2),
-                             str(self.mappingType), str(self.diffFromExpectedSize),
+                             str(self.mapq1), str(self.mapq2), str(self.mappingType), str(self.diffFromExpectedSize),
                              self.support, self.clusterId, self.used, self.include, self.fileNum])
                 )
         out.write("\n")
@@ -275,6 +276,14 @@ def getTotalEditDistance(mappings):
             totalMM1 += m.edit1
             totalMM2 += m.edit2
     return (totalMM1, totalMM2)
+    
+def getTotalMAPQ(mappings):
+    totalMAPQ1 = totalMAPQ2 = 0
+    for m in mappings:
+        if (m.include == "Y"):
+            totalMAPQ1 += m.mapq1
+            totalMAPQ2 += m.mapq2
+    return (totalMAPQ1, totalMAPQ2)
 
 def getTotalNumMappings(mappings):
     totalMappings1 = totalMappings2 = 0
@@ -320,6 +329,7 @@ def reportCluster(mappings, contigId, final, all, detail):
     numMappings          = len(mappings)
     totalQual1           = totalQual2 = 0
     meanMappings1        = meanMappings2 = 0
+    meanMAPQ1            = meanMAPQ2 = 0
     meanQual1            = meanQual2 = 0
     meanMM1              = meanMM2 = 0.0
     numAllUniques        = 0
@@ -343,7 +353,10 @@ def reportCluster(mappings, contigId, final, all, detail):
     # (3)  Get the total number of mappings on each end of this cluster
     (totalMappings1, totalMappings2) = getTotalNumMappings(mappings)
     
-    # (4)  Tally the final, finalWeighted and allWeightedSupport for this cluster
+    # (4)  Get the total MAPQ for each end of this cluster
+    (totalMAPQ1, totalMAPQ2) = getTotalMAPQ(mappings)
+    
+    # (5)  Tally the final, finalWeighted and allWeightedSupport for this cluster
     (finalSupport, finalWeightedSupport, allWeightedSupport, 
      numUniqueMappers, numAnchoredMappers, numMultipleMappers) = computeSupport(mappings)
 
@@ -356,6 +369,8 @@ def reportCluster(mappings, contigId, final, all, detail):
         meanQual2     = totalQual2 / finalSupport
         meanMM1       = totalMM1 / finalSupport
         meanMM2       = totalMM2 / finalSupport
+        meanMAPQ1     = totalMAPQ1 / finalSupport
+        meanMAPQ2     = totalMAPQ2 / finalSupport
     
     # report this contigs as longs as there is at least one uniq
     # pair in the contig.
@@ -365,7 +380,8 @@ def reportCluster(mappings, contigId, final, all, detail):
 
         all.write("\t".join([mappings[0].chrom1, str(minStart1), str(maxEnd1), mappings[0].chrom2, str(contigId), 
                               str(finalSupport), mappings[0].strand1, mappings[0].strand2, str(meanMM1), str(meanMM2), 
-                              str(meanMappings1), str(meanMappings2), str(contigSize), str(numMappings), str(allWeightedSupport), 
+                              str(meanMappings1), str(meanMappings2), str(meanMAPQ1), str(meanMAPQ2),
+                              str(contigSize), str(numMappings), str(allWeightedSupport), 
                               str(finalSupport), str(finalWeightedSupport), str(numUniqueMappers), str(numAnchoredMappers), 
                               str(numMultipleMappers)]) + "\n")
         
@@ -375,7 +391,8 @@ def reportCluster(mappings, contigId, final, all, detail):
                                     mappings[0].chrom2, str(minStart2), str(maxEnd2),
                                     str(contigId), str(finalSupport), mappings[0].strand1, 
                                     mappings[0].strand2, str(meanMM1), str(meanMM2), 
-                                    str(meanMappings1), str(meanMappings2), str(contigSize), str(numMappings), 
+                                    str(meanMappings1), str(meanMappings2), str(meanMAPQ1), str(meanMAPQ2),
+                                    str(contigSize), str(numMappings), 
                                     str(allWeightedSupport), str(finalSupport), str(finalWeightedSupport), 
                                     str(numUniqueMappers), str(numAnchoredMappers), str(numMultipleMappers)]) + "\n")
 
@@ -385,12 +402,13 @@ def reportCluster(mappings, contigId, final, all, detail):
                     detail.write("\t".join([m.chrom1, str(m.start1), str(m.end1), m.chrom2, 
                                              str(m.start2), str(m.end2), m.readId, str(m.whichMateIsBlock1), 
                                              m.strand1, m.strand2, str(m.edit1), str(m.edit2),
-                                             str(m.mappings1), str(m.mappings2), str(m.mappingType), "Y", str(contigId)]) + "\n")
+                                             str(m.mappings1), str(m.mappings2), str(m.mapq1), str(m.mapq2),
+                                             str(m.mappingType), "Y", str(contigId)]) + "\n")
                 else:
                     detail.write("\t".join([m.chrom1, str(m.start1), str(m.end1), m.chrom2, 
                                              str(m.start2), str(m.end2), m.readId, 
                                              str(m.whichMateIsBlock1), m.strand1, m.strand2, str(m.edit1), str(m.edit2),
-                                             str(m.mappings1), str(m.mappings2),
+                                             str(m.mappings1), str(m.mappings2), str(m.mapq1), str(m.mapq2),
                                              str(m.mappingType), "N", str(contigId)]) + "\n")
     return contigId
 
