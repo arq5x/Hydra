@@ -137,7 +137,7 @@ def computeSupportForEachCluster(clusterFile, maxLinkedDistance):
     return clusterSupport
     
 
-def sortClusterFileByReadId(clusterFile, sortMemory):        
+def sortClusterFileByReadId(clusterFile, sortMemory):
     outName = clusterFile + ".readsort"
     cmd = 'sort -S ' + sortMemory + ' -k7,7 ' + clusterFile + ' > ' + outName
     (status, output) = commands.getstatusoutput(cmd)
@@ -145,7 +145,7 @@ def sortClusterFileByReadId(clusterFile, sortMemory):
     
 def sortUpdatedFileByClusterId(clusterFile, sortMemory):        
     outName = clusterFile + ".clustersort"
-    cmd = 'sort -S ' + sortMemory + ' -k18,18n ' + clusterFile + ' > ' + outName
+    cmd = 'sort -S ' + sortMemory + ' -k20,20n ' + clusterFile + ' > ' + outName
     (status, output) = commands.getstatusoutput(cmd)
     return outName
     
@@ -191,7 +191,7 @@ def chooseBestClusterForReads(clusterFile, clusterSupport):
     prevReadId = ""
     clusters = []
     mappings = []
-    
+
     for line in open(clusterFile, 'r'):
         lineList = line.strip().split()
         r2c = READ_TO_CLUSTER(lineList)
