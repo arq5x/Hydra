@@ -131,7 +131,7 @@ def computeSupportForEachCluster(clusterFile, maxLinkedDistance):
             cluster.append(r2c)
         prevClusterId = r2c.clusterId
     
-    (size, totalMM, totalWS, unlinked) = getClusterSupport(cluster, maxLinkedDistance)    
+    (size, totalMM, totalWS, unlinked) = getClusterSupport(cluster, maxLinkedDistance)
     clusterSupport[prevClusterId] = (prevClusterId, size, totalMM, totalWS, unlinked)
 
     return clusterSupport
@@ -160,10 +160,13 @@ def chooseBestClusterForRead(clusterStats):
             return -1
         else:
             return 1
-    
-    clusterStats.sort(bySupportThenMismatches)
-    return clusterStats[0][0]
-    
+    if len(clusterStats) == 1:
+        return clusterStats[0][0]
+    else:
+        distinct_support = list(set(clusterStats))
+        distinct_support.sort(bySupportThenMismatches)
+        return distinct_support[0][0]
+
 def chooseBestClusterForReads(clusterFile, clusterSupport):
     """
     """
@@ -173,7 +176,6 @@ def chooseBestClusterForReads(clusterFile, clusterSupport):
         # this readpair belongs to
         for cluster in clusters:
             support.append(clusterSupport[cluster])
-    
         # choose the best clusterId for this readpair.
         bestCluster = chooseBestClusterForRead(support)
         # update the membership of this read in all of the potential clusters.
@@ -200,7 +202,6 @@ def chooseBestClusterForReads(clusterFile, clusterSupport):
         # multiple clusters
         if (r2c.readId != prevReadId and prevReadId != ""):
             updateMappings(clusters, mappings, clusterSupport, out)
-            
             # reset things for the next read
             clusters = []
             mappings = []
