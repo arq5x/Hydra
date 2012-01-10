@@ -57,7 +57,7 @@ class HYDRA_FINAL_OVERLAP (object):
     def __init__(self, lineList = []):
         if (len(lineList) > 0):
             self.a = HYDRA_FINAL(lineList[0:24])
-            self.b = HYDRA_FINAL(lineList[24:44])
+            self.b = HYDRA_FINAL(lineList[24:48])
             
             self.a_chrom1                  = lineList[0]
             self.a_start1                  = int(lineList[1])
@@ -417,7 +417,6 @@ def mergeBreakpointsWithPairToPair(finalFile, slop, round):
     somethingMerged = False
     for line in p2p:
         lineList = line.strip().split("\t")
-        print lineList, len(lineList)
         curr = HYDRA_FINAL_OVERLAP(lineList)
         if (curr.a_breakpointId != prev.a_breakpointId):
             if len(set) > 0:
@@ -501,7 +500,6 @@ def main():
 
         # Phase 1. Merge by sorting
         while (mergingDone == True and round <= 20):
-            print "yep"
             (mergeByStart, mergedByStart)       = mergeBreakpointsWithSorting(finalInput,  opts.maxDist,  "sortByStart")
             (mergeByStartAndEnd, mergedByEnd)   = mergeBreakpointsWithSorting(mergeByStart, opts.maxDist, "sortByEnd")
             # Was merging done in either case?  If so, we want to resort and try again.
@@ -519,7 +517,6 @@ def main():
         mergeByP2P = None
         finalInput = mergeByStartAndEnd
         while (mergingDone == True):
-            print "yep2"
             (mergeByP2P, mergingDone) = mergeBreakpointsWithPairToPair(finalInput,  opts.maxDist, round)
             if mergingDone:
                 round += 1
@@ -567,9 +564,9 @@ def main():
             # NOTE: The "if oldId in oldToNew" check is a hack to correct for the
             # fact that I mistakenly wrote breakpoints with insufficient final support
             # to the detail file.  This check will correct this problem.
-            oldId = lineList[16]
+            oldId = lineList[18]
             newId = oldToNew[oldId]
-            lineList[16] = newId
+            lineList[18] = newId
             detail.write("\t".join(lineList))
             detail.write("\n")
         detail.close()
