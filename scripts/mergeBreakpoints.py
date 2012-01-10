@@ -25,14 +25,16 @@ class HYDRA_FINAL (object):
             self.meanEditDist2           = int(lineList[11])
             self.meanMappings1           = int(lineList[12])
             self.meanMappings2           = int(lineList[13])
-            self.breakpointSize          = int(lineList[14])
-            self.numMappings             = int(lineList[15])
-            self.allWeightedSupport 	 = float(lineList[16])
-            self.finalSupport            = int(lineList[17])
-            self.finalWeightedSupport    = float(lineList[18])
-            self.numUniquePairs          = int(lineList[19])
-            self.numAnchoredPairs 	     = int(lineList[20])
-            self.numMultiplyMappedPairs  = int(lineList[21])
+            self.meanMAPQ1               = int(lineList[14])
+            self.meanMAPQ2               = int(lineList[15])
+            self.breakpointSize          = int(lineList[16])
+            self.numMappings             = int(lineList[17])
+            self.allWeightedSupport 	 = float(lineList[18])
+            self.finalSupport            = int(lineList[19])
+            self.finalWeightedSupport    = float(lineList[20])
+            self.numUniquePairs          = int(lineList[21])
+            self.numAnchoredPairs 	     = int(lineList[22])
+            self.numMultiplyMappedPairs  = int(lineList[23])
             self.valid = True
         else:
             self.valid = False
@@ -46,6 +48,7 @@ class HYDRA_FINAL (object):
                              self.chrom2, str(self.start2), str(self.end2),
                              str(self.breakpointId), str(self.numDistinctPairs), self.strand1, self.strand2,
                              str(self.meanEditDist1), str(self.meanEditDist2), str(self.meanMappings1), str(self.meanMappings2),
+                             str(self.meanMAPQ1), str(self.meanMAPQ2),
                              str(self.breakpointSize), str(self.numMappings), str(self.allWeightedSupport), str(self.finalSupport),
                              str(self.finalWeightedSupport), str(self.numUniquePairs), str(self.numAnchoredPairs), str(self.numMultiplyMappedPairs)]))
             out.write("\n")
@@ -53,8 +56,8 @@ class HYDRA_FINAL (object):
 class HYDRA_FINAL_OVERLAP (object):
     def __init__(self, lineList = []):
         if (len(lineList) > 0):
-            self.a = HYDRA_FINAL(lineList[0:22])
-            self.b = HYDRA_FINAL(lineList[22:44])
+            self.a = HYDRA_FINAL(lineList[0:24])
+            self.b = HYDRA_FINAL(lineList[24:44])
             
             self.a_chrom1                  = lineList[0]
             self.a_start1                  = int(lineList[1])
@@ -70,38 +73,41 @@ class HYDRA_FINAL_OVERLAP (object):
             self.a_meanEditDist2           = int(lineList[11])
             self.a_meanMappings1           = int(lineList[12])
             self.a_meanMappings2           = int(lineList[13])
-            self.a_breakpointSize          = int(lineList[14])
-            self.a_numMappings             = int(lineList[15])
-            self.a_allWeightedSupport        = float(lineList[16])
-            self.a_finalSupport            = int(lineList[17])
-            self.a_finalWeightedSupport    = float(lineList[18])
-            self.a_numUniquePairs          = int(lineList[19])
-            self.a_numAnchoredPairs      = int(lineList[20])
-            self.a_numMultiplyMappedPairs  = int(lineList[21])
+            self.a_meanMAPQ1               = int(lineList[14])
+            self.a_meanMAPQ2               = int(lineList[15])
+            self.a_breakpointSize          = int(lineList[16])
+            self.a_numMappings             = int(lineList[17])
+            self.a_allWeightedSupport        = float(lineList[18])
+            self.a_finalSupport            = int(lineList[19])
+            self.a_finalWeightedSupport    = float(lineList[20])
+            self.a_numUniquePairs          = int(lineList[21])
+            self.a_numAnchoredPairs      = int(lineList[22])
+            self.a_numMultiplyMappedPairs  = int(lineList[23])
             
-            self.b_chrom1                  = lineList[22]
-            self.b_start1                  = int(lineList[23])
-            self.b_end1                    = int(lineList[24])
-            self.b_chrom2                  = lineList[25]
-            self.b_start2                  = int(lineList[26])
-            self.b_end2                  = int(lineList[27])
-            self.b_breakpointId          = lineList[28]
-            self.b_numDistinctPairs      = int(lineList[29])
-            self.b_strand1                 = lineList[30]
-            self.b_strand2                 = lineList[31]
-            self.b_meanEditDist1           = int(lineList[32])
-            self.b_meanEditDist2           = int(lineList[33])
-            self.b_meanMappings1           = int(lineList[34])
-            self.b_meanMappings2           = int(lineList[35])
-            self.b_breakpointSize          = int(lineList[36])
-            self.b_numMappings             = int(lineList[37])
-            self.b_allWeightedSupport        = float(lineList[38])
-            self.b_finalSupport            = int(lineList[39])
-            self.b_finalWeightedSupport    = float(lineList[40])
-            self.b_numUniquePairs          = int(lineList[41])
-            self.b_numAnchoredPairs      = int(lineList[42])
-            self.b_numMultiplyMappedPairs  = int(lineList[43])
-
+            self.b_chrom1                  = lineList[24]
+            self.b_start1                  = int(lineList[25])
+            self.b_end1                    = int(lineList[26])
+            self.b_chrom2                  = lineList[27]
+            self.b_start2                  = int(lineList[28])
+            self.b_end2                  = int(lineList[29])
+            self.b_breakpointId          = lineList[30]
+            self.b_numDistinctPairs      = int(lineList[31])
+            self.b_strand1                 = lineList[32]
+            self.b_strand2                 = lineList[33]
+            self.b_meanEditDist1           = int(lineList[34])
+            self.b_meanEditDist2           = int(lineList[35])
+            self.b_meanMappings1           = int(lineList[36])
+            self.b_meanMappings2           = int(lineList[37])
+            self.b_meanMAPQ1               = int(lineList[38])
+            self.b_meanMAPQ2               = int(lineList[39])
+            self.b_breakpointSize          = int(lineList[40])
+            self.b_numMappings             = int(lineList[41])
+            self.b_allWeightedSupport        = float(lineList[42])
+            self.b_finalSupport            = int(lineList[43])
+            self.b_finalWeightedSupport    = float(lineList[44])
+            self.b_numUniquePairs          = int(lineList[45])
+            self.b_numAnchoredPairs      = int(lineList[46])
+            self.b_numMultiplyMappedPairs  = int(lineList[47])
             self.valid = True
         else:
             self.a = HYDRA_FINAL([])
@@ -115,6 +121,7 @@ class HYDRA_FINAL_OVERLAP (object):
                          self.a.chrom2, str(self.a.start2), str(self.a.end2),
                          str(self.a.breakpointId), str(self.a.numDistinctPairs), self.a.strand1, self.a.strand2,
                          str(self.a.meanEditDist1), str(self.a.meanEditDist2), str(self.a.meanMappings1), str(self.a.meanMappings2),
+                         str(self.a.meanMAPQ1), str(self.a.meanMAPQ2),
                          str(self.a.breakpointSize), str(self.a.numMappings), str(self.a.allWeightedSupport), str(self.a.finalSupport),
                          str(self.a.finalWeightedSupport), str(self.a.numUniquePairs), str(self.a.numAnchoredPairs), str(self.a.numMultiplyMappedPairs)]))
             out.write("\n")
@@ -125,6 +132,7 @@ class HYDRA_FINAL_OVERLAP (object):
                          self.b.chrom2, str(self.b.start2), str(self.b.end2),
                          str(self.b.breakpointId), str(self.b.numDistinctPairs), self.b.strand1, self.b.strand2,
                          str(self.b.meanEditDist1), str(self.b.meanEditDist2), str(self.b.meanMappings1), str(self.b.meanMappings2),
+                         str(self.b.meanMAPQ1), str(self.b.meanMAPQ2),
                          str(self.b.breakpointSize), str(self.b.numMappings), str(self.b.allWeightedSupport), str(self.b.finalSupport),
                          str(self.b.finalWeightedSupport), str(self.b.numUniquePairs), str(self.b.numAnchoredPairs), str(self.b.numMultiplyMappedPairs)]))
             out.write("\n")
@@ -142,13 +150,9 @@ class HYDRA_FINAL_OVERLAP (object):
                                  str(self.a.numDistinctPairs),
                                  self.a.strand1,
                                  self.a.strand2,
-                         self.b.chrom1, str(self.b.start1), str(self.b.end1),
-                         self.b.chrom2, str(self.b.start2), str(self.b.end2),
-                         str(self.b.breakpointId), str(self.b.numDistinctPairs), self.b.strand1, self.b.strand2]))
-
-
-
-
+                                 self.b.chrom1, str(self.b.start1), str(self.b.end1),
+                                 self.b.chrom2, str(self.b.start2), str(self.b.end2),
+                                 str(self.b.breakpointId), str(self.b.numDistinctPairs), self.b.strand1, self.b.strand2]))
 
 def overlap(s1, s2, e1, e2):
     return min(e1,e2) - max(s1,s2)
@@ -204,6 +208,8 @@ def merge_s(breaks, output, slop):
     allMeanEditDist2           = 0
     allMeanMappings1           = 0
     allMeanMappings2           = 0
+    allMeanMAPQ1               = 0
+    allMeanMAPQ2               = 0
     allNumMappings             = 0
     allAllWeightedSupport 	   = 0
     allFinalSupport            = 0
@@ -225,6 +231,8 @@ def merge_s(breaks, output, slop):
         allMeanEditDist2           += b.meanEditDist2
         allMeanMappings1           += b.meanMappings1
         allMeanMappings2           += b.meanMappings2
+        allMeanMAPQ1               += b.meanMAPQ1
+        allMeanMAPQ2               += b.meanMAPQ2
         allNumMappings             += b.numMappings
         allAllWeightedSupport 	   += b.allWeightedSupport
         allFinalSupport            += b.finalSupport
@@ -237,6 +245,8 @@ def merge_s(breaks, output, slop):
     finalMeanEditDist2 = allMeanEditDist2 / numBreaks
     finalMeanMappings1 = allMeanMappings1 / numBreaks
     finalMeanMappings2 = allMeanMappings2 / numBreaks
+    finalMeanMAPQ1     = allMeanMAPQ1 / numBreaks
+    finalMeanMAPQ2     = allMeanMAPQ2 / numBreaks
     mergedSize = (maxEnd2 - minStart1) + 1
 
     idString = "_".join(ids)
@@ -244,6 +254,7 @@ def merge_s(breaks, output, slop):
                                breaks[0].chrom2, str(minStart2), str(maxEnd2),
                                idString, str(allNumDistinctPairs), breaks[0].strand1, breaks[0].strand2,
                                str(finalMeanEditDist1), str(finalMeanEditDist2), str(finalMeanMappings1), str(finalMeanMappings2),
+                               str(finalMeanMAPQ1), str(finalMeanMAPQ2),
                                str(mergedSize), str(allNumMappings), str(allAllWeightedSupport), str(allFinalSupport),
                                str(allFinalWeightedSupport), str(allNumUniquePairs), str(allNumAnchoredPairs), str(allNumMultiplyMappedPairs)])
     mergedBreak.dump(output)
@@ -262,6 +273,8 @@ def merge(toMerge, output):
     allMeanEditDist2           = 0
     allMeanMappings1           = 0
     allMeanMappings2           = 0
+    allMeanMAPQ1               = 0
+    allMeanMAPQ2               = 0
     allNumMappings             = 0
     allAllWeightedSupport 	   = 0
     allFinalSupport            = 0
@@ -286,6 +299,8 @@ def merge(toMerge, output):
         allMeanEditDist2           += b.meanEditDist2
         allMeanMappings1           += b.meanMappings1
         allMeanMappings2           += b.meanMappings2
+        allMeanMAPQ1               += b.meanMAPQ1
+        allMeanMAPQ2               += b.meanMAPQ2
         allNumMappings             += b.numMappings
         allAllWeightedSupport 	   += b.allWeightedSupport
         allFinalSupport            += b.finalSupport
@@ -298,6 +313,8 @@ def merge(toMerge, output):
     finalMeanEditDist2 = allMeanEditDist2 / numBreaks
     finalMeanMappings1 = allMeanMappings1 / numBreaks
     finalMeanMappings2 = allMeanMappings2 / numBreaks
+    finalMeanMAPQ1     = allMeanMAPQ1 / numBreaks
+    finalMeanMAPQ2     = allMeanMAPQ2 / numBreaks
     mergedSize = (maxEnd2 - minStart1) + 1
 
     idString = "_".join(ids)
@@ -305,6 +322,7 @@ def merge(toMerge, output):
                                toMerge[0].chrom2, str(minStart2), str(maxEnd2),
                                idString, str(allNumDistinctPairs), toMerge[0].strand1, toMerge[0].strand2,
                                str(finalMeanEditDist1), str(finalMeanEditDist2), str(finalMeanMappings1), str(finalMeanMappings2),
+                               str(finalMeanMAPQ1), str(finalMeanMAPQ2),
                                str(mergedSize), str(allNumMappings), str(allAllWeightedSupport), str(allFinalSupport),
                                str(allFinalWeightedSupport), str(allNumUniquePairs), str(allNumAnchoredPairs), str(allNumMultiplyMappedPairs)])
     mergedBreak.dump(output)
@@ -399,6 +417,7 @@ def mergeBreakpointsWithPairToPair(finalFile, slop, round):
     somethingMerged = False
     for line in p2p:
         lineList = line.strip().split("\t")
+        print lineList, len(lineList)
         curr = HYDRA_FINAL_OVERLAP(lineList)
         if (curr.a_breakpointId != prev.a_breakpointId):
             if len(set) > 0:
@@ -482,6 +501,7 @@ def main():
 
         # Phase 1. Merge by sorting
         while (mergingDone == True and round <= 20):
+            print "yep"
             (mergeByStart, mergedByStart)       = mergeBreakpointsWithSorting(finalInput,  opts.maxDist,  "sortByStart")
             (mergeByStartAndEnd, mergedByEnd)   = mergeBreakpointsWithSorting(mergeByStart, opts.maxDist, "sortByEnd")
             # Was merging done in either case?  If so, we want to resort and try again.
@@ -499,6 +519,7 @@ def main():
         mergeByP2P = None
         finalInput = mergeByStartAndEnd
         while (mergingDone == True):
+            print "yep2"
             (mergeByP2P, mergingDone) = mergeBreakpointsWithPairToPair(finalInput,  opts.maxDist, round)
             if mergingDone:
                 round += 1
@@ -541,7 +562,6 @@ def main():
         detail = open(mergedDetail, 'w')
         for line in open(opts.detail, 'r'):
             lineList = line.strip().split("\t")
-
             # only replace the id if it ever made it to the ".final" file.
             # i.e., we don't care about "N" mappings, just "Y"
             # NOTE: The "if oldId in oldToNew" check is a hack to correct for the
@@ -552,17 +572,6 @@ def main():
             lineList[16] = newId
             detail.write("\t".join(lineList))
             detail.write("\n")
-            # if oldId in oldToNew:
-            #     
-            #     if lineList[15] == "Y":
-            #         newId = oldToNew[oldId]
-            #         lineList[16] = newId
-            #         detail.write("\t".join(lineList))
-            #     else:
-            #         detail.write("\t".join(lineList))
-            #     detail.write("\n")
-            # else:
-            #     print oldId, "not in set"
         detail.close()
         
         for tmp in tempFiles:
