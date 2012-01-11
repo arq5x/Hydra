@@ -290,12 +290,8 @@ def getTotalNumMappings(mappings):
     totalMappings1 = totalMappings2 = 0
     for m in mappings:
         if (m.include == "Y"):
-            if (m.whichMateIsBlock1 == 1):
-                totalMappings1 += m.mappings1
-                totalMappings2 += m.mappings2
-            else:
-                totalMappings1 += m.mappings2
-                totalMappings2 += m.mappings1
+            totalMappings1 += m.mappings1
+            totalMappings2 += m.mappings2
     return (totalMappings1, totalMappings2)
                 
 def computeSupport(mappings):

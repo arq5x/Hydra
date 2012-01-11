@@ -278,22 +278,19 @@ void HydraPE::SwapEnds(CORE_PAIR &pair) {
     int tmpEnd             = pair.end1;
     string tmpStrand       = pair.strand1;
     unsigned short tmpEdit = pair.edit1;
-    
+
     // set end1 to end2
     pair.chrom1  = pair.chrom2;
     pair.mate1   = pair.mate2;
     pair.start1  = pair.start2;
     pair.end1    = pair.end2;
     pair.strand1 = pair.strand2;
-    pair.edit1   = pair.edit2;
-    
     // set end2 to end1
     pair.chrom2  = tmpChrom;
     pair.mate2   = tmpMate;
     pair.start2  = tmpStart;
     pair.end2    = tmpEnd;
     pair.strand2 = tmpStrand;
-    pair.edit2   = tmpEdit;
 }
 
 
@@ -1095,7 +1092,7 @@ void HydraPE::CullMappingsByMisMatches_UsingGivenMappingNumbers (pairVector &pai
         totalMM = getTotalMM(*mapIter);
         if (totalMM < minMM)
             minMM = totalMM;
-    }   
+    }
 
     // determine what type of PEM it is based on the 
     // number of mappings for the two ends.
@@ -1108,7 +1105,7 @@ void HydraPE::CullMappingsByMisMatches_UsingGivenMappingNumbers (pairVector &pai
 
     // sort the reads so the mappings with the least mismatches are at the "top"                                                                                                                                                    
     sort(pairMappings.begin(), pairMappings.end(), byTotalMM);
-                                                                                                                                        
+
     // default to assuming we want to use just the best mappings
     // "withinBest" = allow up to editBeyondBest edits worse than minMM
     // "all" = we don't want to delete anything.
@@ -1123,7 +1120,6 @@ void HydraPE::CullMappingsByMisMatches_UsingGivenMappingNumbers (pairVector &pai
         mappingsIter->mappingType = mapType; // set the mapping type for all of the mappings within the edit distance cutoff
         mappingsIter++;
     }
-    
     // ditch all but the least mm set.
     pairMappings.erase(mappingsIter, pairMappings.end());
 }
