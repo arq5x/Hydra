@@ -313,11 +313,11 @@ void HydraPE::AddMappingsToMasterFile(const vector<pairVector> &readMappings) {
         for (; mapIter != mapEnd; ++mapIter) {
             // determine the name of the master file to write to.
             stringstream masterFileNameSS;
-            masterFileNameSS << mapIter->core.chrom1 << mapIter->core.chrom2;
+            masterFileNameSS << mapIter->core.chrom1 << "." << mapIter->core.chrom2;
             if (this->lumpInversions == true && IsInversionMapping(mapIter->core) == true)
-                masterFileNameSS << "+,+";
+                masterFileNameSS << "." << "+.+";
             else
-                masterFileNameSS << mapIter->core.strand1 << mapIter->core.strand2;
+                masterFileNameSS << "." << mapIter->core.strand1 << "." << mapIter->core.strand2;
             string masterFileName = masterFileNameSS.str();
         
 

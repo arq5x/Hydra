@@ -302,7 +302,7 @@ def computeSupport(mappings):
     
     for m in mappings:
         if (m.mappingType == UNIQ_TYPE):        
-            if m.include == "Y":
+            if m.include == "Y": 
                 finalSupport += 1
                 finalWeightedSupport += UNIQ_WEIGHT
                 numUniqueMappers += 1
