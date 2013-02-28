@@ -3,6 +3,7 @@ import sys
 import os
 import pysam
 import subprocess
+import multiprocessing as mp
 from optparse import OptionParser
 
 
@@ -138,12 +139,12 @@ def make_discordant_bedpe(discordant_bam_filename,
 
 
 def main():
-    usage = """%prog -i <config_stub>
+    usage = """%prog -i <bam_file>
     """
     parser = OptionParser(usage)
 
-    parser.add_option("-i", dest="config",
-        help="Basic input sample file (sample_id[TAB]sample_file_path)",
+    parser.add_option("-i", dest="bam_file",
+        help="Input BAM file",
         metavar="FILE")
     
     parser.add_option("--min_mapq", dest="min_mapq",
@@ -163,18 +164,17 @@ def main():
     (opts, args) = parser.parse_args()
 
     # Make sure we have wha we need.  If so, on to the goodness.
-    if opts.config is None:
+    if opts.bam_file is None:
         parser.print_help()
         print
     else:
-        for (sample, bam_filename) in parse_config(opts.config):
-            discordant_bam = make_discordant_bam(bam_filename)
-            discordant_bam_query_sort = query_sort_discordant(discordant_bam)
-            discordant_bedpe = make_discordant_bedpe(discordant_bam_query_sort,
-                                                     bam_filename,
-                                                     opts.min_mapq,
-                                                     opts.max_edit,
-                                                     opts.allow_dups)
+        discordant_bam = make_discordant_bam(opts.bam_file)
+        discordant_bam_query_sort = query_sort_discordant(discordant_bam)
+        discordant_bedpe = make_discordant_bedpe(discordant_bam_query_sort,
+                                                 opts.bam_file,
+                                                 opts.min_mapq,
+                                                 opts.max_edit,
+                                                 opts.allow_dups)
 
 
 if __name__ == "__main__":
