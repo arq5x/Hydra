@@ -236,7 +236,7 @@ int main(int argc, char* argv[]) {
     		}
 		}
 		
-        HydraPE *events = new HydraPE(sampleLibs, minSupport,
+        HydraPE *events = new HydraPE(sampleLibs, "", minSupport,
                                                 maxLinkedDistance, ignoreSize, lumpInversions,
                                                 mappingUsage, editBeyondBest, memory, true);
         

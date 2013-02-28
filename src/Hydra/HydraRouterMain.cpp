@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
     // 5. num mads/stds. (float)
     string configFile;
     string routedFiles;
+    string routedFileList;
     string posSortedFiles;
     vector<DNALIB> sampleLibs;
 
@@ -60,7 +61,8 @@ int main(int argc, char* argv[]) {
     bool haveDiscordants        = false;
     bool haveOutFile            = false;
     bool haveRoutedFiles        = false;
-    bool havePosSortedFiles    = false;
+    bool haveRoutedFileList     = false;
+    bool havePosSortedFiles     = false;
     bool haveLD                 = false;  // deprecated 
     bool haveSD                 = false;  // deprecated
     bool haveSizes              = false;
@@ -104,6 +106,14 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+        else if(PARAMETER_CHECK("-routedList", 11, parameterLength)) {
+            if ((i+1) < argc) {
+                haveRoutedFileList = true;
+                routedFileList = argv[i + 1];
+                cerr << "  Routed file list (-routedList): " << routedFileList << endl;
+                i++;
+            }
+        }
         else if(PARAMETER_CHECK("-useMappings", 12, parameterLength)) {
             useGivenMappings = true;
         }
@@ -115,6 +125,11 @@ int main(int argc, char* argv[]) {
 
     if (!haveConfigFile) {
         cerr << "*****ERROR: You must specify an input configuration file.*****" << endl << endl;
+        showHelp = true;
+    }
+    
+    if (!haveRoutedFileList) {
+        cerr << "*****ERROR: You must specify an output file to contain a list of the routed files.*****" << endl << endl;
         showHelp = true;
     }
 
@@ -140,12 +155,13 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        HydraPE *events = new HydraPE(sampleLibs, minSupport,
+        HydraPE *events = new HydraPE(sampleLibs, routedFileList, minSupport,
                                       maxLinkedDistance, ignoreSize, lumpInversions,
                                       mappingUsage, editBeyondBest, memory, useGivenMappings);
         
         cerr << "  Routing discordant mappings to master chrom/chrom/strand/strand files." << endl;  
         events->RouteDiscordantMappings();
+        events->WriteRoutedFiles();
         return 0;
     }
     else {
@@ -164,13 +180,15 @@ void ShowHelp(void) {
     cerr << "Usage:   " << PROGRAM_NAME << " -config" << endl << endl;
 
     cerr << "Options:" << endl;
-    cerr << "  -config\tConfiguration file." << endl;
+    cerr << "  -config\tConfiguration file. (req'd)" << endl;
     cerr << "       \t\tCol 1. Sample Id (string)" << endl;
     cerr << "       \t\tCol 2. Mapping file (path/file)" << endl;
     cerr << "       \t\tCol 3. Expected insert size (integer)" << endl;
     cerr << "       \t\tCol 4. Variance (integer)" << endl;
     cerr << "       \t\tCol 5. Num. variances (integer)" << endl << endl;
 
+    cerr << "  -routedList\tOutput file containing the list of routed files (req'd)." << endl << endl;
+    
     cerr << "  -useMappings\tDon't count mappings, use the num_mappings fields." << endl << endl;
 
     // end the program here

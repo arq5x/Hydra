@@ -255,7 +255,7 @@ public:
     //************************************************
 
     // constructor
-    HydraPE(vector<DNALIB> libraries, int minSupport,
+    HydraPE(vector<DNALIB> libraries, string routedFileList, int minSupport,
             int maxLinkedDistance, bool ignoreSize,
             bool lumpInversions, string mappingUsage, int editBeyondBest, 
             int memory, bool useGivenMappings);
@@ -304,6 +304,7 @@ public:
     void AllowOneContigPerRead();                                       // find the most likely contig for each pair
     void ReportSVCalls(string &);                                       // report the final SV calls to output files.
 
+    void WriteRoutedFiles(void);
 
 private:
 
@@ -319,6 +320,8 @@ private:
     bool           _useGivenMappings;
 
     vector<DNALIB> _libraries;
+    string _routedFileList;
+    
 
     // the intermediate files
     map<string, ostream*> _masterChromStrandFiles;     // the name and ostream of the chr/chr/str/str files
@@ -365,6 +368,8 @@ private:
     void RouteFile(const string &file, int fileNum);
     void FindIntraClusters(ifstream *sortedMappings, ofstream *clusters, int &clusterId);
     void FindInterClusters(ifstream *sortedMappings, ofstream *clusters, int &clusterId);
+    
+
 };
 
 #endif

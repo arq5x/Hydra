@@ -14,11 +14,12 @@ Author:         Aaron Quinlan, Ph.D
 #include "ExternalMergeSort.h"
 
 // make
-HydraPE::HydraPE(vector<DNALIB> libraries, 
+HydraPE::HydraPE(vector<DNALIB> libraries, string routedFileList,
                  int minSupport, int maxLinkedDistance, bool ignoreSize, 
                  bool lumpInversions, string mappingUsage, int editBeyondBest, 
                  int memory, bool useGivenMappings) 
 : _libraries(libraries)
+, _routedFileList(routedFileList)
 , minSupport(minSupport)
 , maxLinkedDistance(maxLinkedDistance)
 , ignoreSize(ignoreSize)
@@ -76,25 +77,32 @@ void HydraPE::WritePosClusterToFile(ofstream *out, vector<PAIR> &cluster, int cl
 
 void HydraPE::RouteDiscordantMappings() {
     
+    string mapping_file;
+     
     // first check if we can open all of the requested files
     for (int fileNum = 0; fileNum < _libraries.size(); ++fileNum) {
+        
+        mapping_file = _libraries[fileNum]._mappingFile + ".bedpe";
+        
         // open the mapping files for reading
-        ifstream mappings(_libraries[fileNum]._mappingFile.c_str(), ios::in);        
+        ifstream mappings(mapping_file.c_str(), ios::in);        
         if ( !mappings ) {
-            cerr << "Error: The requested mappings file (" << _libraries[fileNum]._mappingFile << ") could not be opened. Exiting!" << endl;
+            cerr << "Error: The requested mappings file (" 
+                 << mapping_file 
+                 << ") could not be opened. Exiting!" 
+                 << endl;
             exit (1);
         }
         else {
-            cerr << "Found " << _libraries[fileNum]._mappingFile << endl;
+            cerr << "Found " << mapping_file << endl;
             mappings.close();
         }
     }
 
     int numFiles = _libraries.size();
-    string file; 
     for (int fileNum = 0; fileNum < numFiles; ++fileNum) {      
-        file = _libraries[fileNum]._mappingFile;
-        RouteFile(file, fileNum);
+        mapping_file = _libraries[fileNum]._mappingFile + ".bedpe";
+        RouteFile(mapping_file, fileNum);
     }  // end loop through discordant mapping files.
 }
 
@@ -124,6 +132,7 @@ void HydraPE::RouteFile(const string &file, int fileNum) {
      
     // loop through the current mapping file and store each line in a PAIR struct.
     while (*mappings >> line) {
+        
         // get the id for the current mapping                           
         currRead = line.readId; 
         // set the ends of the pair
@@ -357,6 +366,19 @@ ostream* HydraPE::GetMasterFileStream(const string &masterFileName, bool isIntra
     return output;
 }
 
+
+void HydraPE::WriteRoutedFiles(void)
+{
+    ostream *output = new ofstream(_routedFileList.c_str(), ios::out);
+    
+    map<string, ostream*>::const_iterator mapIter = _masterChromStrandFiles.begin();
+    map<string, ostream*>::const_iterator mapEnd  = _masterChromStrandFiles.end();
+    // write the contents of the current buffer to the master file
+    for (; mapIter != mapEnd; ++mapIter) 
+    {
+        *output << mapIter->first << endl;
+    }
+}
 
 bool HydraPE::IsInversionMapping(const CORE_PAIR &pair) {
     if (
