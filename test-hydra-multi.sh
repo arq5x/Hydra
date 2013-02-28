@@ -18,7 +18,7 @@ echo "done"
 
 
 echo "extracting discordant alignments from BAM files...\c"
-python scripts/extract_discordants.py -i config.hydra.txt
+sh scripts/extract_all_discordants.sh config.hydra.txt 2
 echo "done"
 
 
@@ -54,4 +54,4 @@ echo "done"
 #11      1915202 1915263 11      1937103 1937205 ERR023222.17735071      1       +       -       0       2       1       1       37      37      1       Y       19
 
 # 1000G call
-http://genome.ucsc.edu/cgi-bin/hgc?hgsid=327887259&c=chr11&o=1915273&t=1936956&g=tgpPhase1&i=G%2F%3CDEL%3E
+# http://genome.ucsc.edu/cgi-bin/hgc?hgsid=327887259&c=chr11&o=1915273&t=1936956&g=tgpPhase1&i=G%2F%3CDEL%3E
