@@ -6,11 +6,36 @@ fi
 
 CONFIG=$1
 PROCS=$2
-
 COUNTER=0
-for bam in `cut -f 2 $CONFIG`; 
-do 
-	python scripts/extract_discordants.py -i $bam &
-	COUNTER=$((COUNTER + 1))
-	if (( $COUNTER % $PROCS == 0 )); then wait; fi # Limit to $PROCS concurrent subshells.
+INDEX=0
+
+
+function add_next_bam {
+    # if still jobs to do then add one
+    if [[ $COUNTER -lt PROCS ]]
+    then
+	COUNTER=$(($COUNTER+1))
+		extract_discordants ${bams_todo[$INDEX]} & 
+		INDEX=$(($INDEX+1))
+	else
+		wait
+		COUNTER=$(($COUNTER-$PROCS))
+    fi
+}
+
+
+function extract_discordants {
+	samtools view -bF 0x2 $1 > $1.disc.tmp.bam
+	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
+	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam
+}
+
+
+
+bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
+max_index=${#bams_todo[*]}-1
+while [[ $INDEX -le $max_index ]]
+do
+    add_next_bam
 done
+

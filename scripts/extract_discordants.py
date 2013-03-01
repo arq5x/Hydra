@@ -2,6 +2,7 @@
 import sys
 import os
 import pysam
+import string
 import subprocess
 import multiprocessing as mp
 from optparse import OptionParser
@@ -70,35 +71,39 @@ def parse_config(config):
         yield (sample, file)
 
 
-def make_discordant_bam(bam_filename):
+# def make_discordant_bam(bam_filename):
+# 
+#     bamfile = pysam.Samfile(bam_filename, "rb")
+# 
+#     tmp_bam_file_name = bam_filename + ".disc.tmp.bam"
+#     tmp_bamfile = pysam.Samfile(tmp_bam_file_name, "wb", 
+#                                 template = bamfile)
+# 
+#     
+#     # extract only the discordant BAM files.
+#     for aln in bamfile:
+#         if not aln.is_proper_pair:
+#             tmp_bamfile.write(aln)
+#     tmp_bamfile.close()
+#     bamfile.close()
+#     
+#     return tmp_bam_file_name
 
-    bamfile = pysam.Samfile(bam_filename, "rb")
 
-    tmp_bam_file_name = bam_filename + ".disc.tmp.bam"
-    tmp_bamfile = pysam.Samfile(tmp_bam_file_name, "wb", 
-                                template = bamfile)
-
-    # extract only the discordant BAM files.
-    for aln in bamfile:
-        if not aln.is_proper_pair:
-            tmp_bamfile.write(aln)
-    tmp_bamfile.close()
-    bamfile.close()
-    
-    return tmp_bam_file_name
-    
-def query_sort_discordant(bam_filename):
-    query_sort_filename = bam_filename + ".qrysort"
-    pysam.sort("-m", "1000000000", "-n", 
-               bam_filename, query_sort_filename )
-    os.remove(bam_filename)
-    return query_sort_filename + ".bam"
+# def query_sort_discordant(bam_filename):
+#     query_sort_filename = bam_filename + ".qrysort"
+#     pysam.sort("-m", "1000000000", "-n", 
+#                bam_filename, query_sort_filename )
+#     os.remove(bam_filename)
+#     return query_sort_filename + ".bam"
+# 
 
 def make_discordant_bedpe(discordant_bam_filename, 
-                          orig_bam_filename, 
                           min_mapq, max_edit, allow_dups):
     
-    bedpe_outfile_name = orig_bam_filename + ".bedpe"
+    orig_bam_filename = discordant_bam_filename
+    idx = string.find(orig_bam_filename, ".disc.tmp.bam.qrysort.bam")
+    bedpe_outfile_name = orig_bam_filename[0:idx] + ".bedpe"
     bedpe_outfile = open(bedpe_outfile_name, 'w')
 
     bam1 = None
@@ -168,10 +173,9 @@ def main():
         parser.print_help()
         print
     else:
-        discordant_bam = make_discordant_bam(opts.bam_file)
-        discordant_bam_query_sort = query_sort_discordant(discordant_bam)
-        discordant_bedpe = make_discordant_bedpe(discordant_bam_query_sort,
-                                                 opts.bam_file,
+        #discordant_bam = make_discordant_bam(opts.bam_file)
+        # discordant_bam_query_sort = query_sort_discordant(discordant_bam)
+        discordant_bedpe = make_discordant_bedpe(opts.bam_file,
                                                  opts.min_mapq,
                                                  opts.max_edit,
                                                  opts.allow_dups)
