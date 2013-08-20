@@ -25,7 +25,7 @@ function add_next_bam {
 
 
 function extract_discordants {
-	amtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
+	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
 	rm $1.disc.tmp.bam
 	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam
