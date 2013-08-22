@@ -53,8 +53,8 @@ def parse_config_stub(config_stub):
 			sys.exit("config stub file should only have 2 fields")
 		sample, file = fields[0], fields[1]
 		file_size = os.path.getsize(file)
-		(sample, file, size) = fields[0], file, file_size
-		stub_list.append((sample, file, size))
+		(sample, file, file_size) = sample, file, file_size
+		stub_list.append((sample, file, file_size))
 	"""Sort the stub list of sets by largest value"""
 	stub_list.sort(key=lambda x: x[2], reverse=True)
 	for item in stub_list:
@@ -85,7 +85,7 @@ def main():
         parser.print_help()
         print
     else:
-        for (sample, file, size) in parse_config_stub(opts.config_stub):
+        for (sample, file, file_size) in parse_config_stub(opts.config_stub):
 
             bamfile = pysam.Samfile(file, "rb")
             isizes = []
