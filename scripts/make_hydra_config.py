@@ -45,14 +45,20 @@ def meanstdv(x):
 
 
 def parse_config_stub(config_stub):
-    """Yield each sample and filename from stub config file."""
-    for line in open(config_stub):
-        fields = line.strip().split('\t')
-        if len(fields) != 2:
-            sys.exit("config stub file should only have 2 fields")
-        
-        (sample, file) = fields[0], fields[1]
-        yield (sample, file)
+	"""Yield each sample and filename from stub config file by bam size."""
+	stub_list = []
+	for line in open(config_stub):
+		fields = line.strip().split('\t')
+		if len(fields) != 2:
+			sys.exit("config stub file should only have 2 fields")
+		sample, file = fields[0], fields[1]
+		file_size = os.path.getsize(file)
+		(sample, file, size) = fields[0], file, file_size
+		stub_list.append((sample, file, size))
+	"""Sort the stub list of sets by largest value"""
+	stub_list.sort(key=lambda x: x[2], reverse=True)
+	for item in stub_list:
+		yield item
 
 
 def main():
@@ -79,7 +85,7 @@ def main():
         parser.print_help()
         print
     else:
-        for (sample, file) in parse_config_stub(opts.config_stub):
+        for (sample, file,size) in parse_config_stub(opts.config_stub):
 
             bamfile = pysam.Samfile(file, "rb")
             isizes = []
