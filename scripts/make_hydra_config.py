@@ -55,7 +55,7 @@ def parse_config_stub(config_stub):
 		file_size = os.path.getsize(file)
 		(sample, file, file_size) = sample, file, file_size
 		stub_list.append((sample, file, file_size))
-	"""Sort the stub list of sets by largest value"""
+	"""Sort the stub list of sets by byte largest value"""
 	stub_list.sort(key=lambda x: x[2], reverse=True)
 	for item in stub_list:
 		yield item
