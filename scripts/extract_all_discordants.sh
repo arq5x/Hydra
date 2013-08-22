@@ -23,6 +23,11 @@ function add_next_bam {
     fi
 }
 
+function add_final_bam {
+    extract_discordants ${bams_todo[$INDEX]}
+    wait
+}
+
 
 function extract_discordants {
 	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
@@ -35,8 +40,12 @@ function extract_discordants {
 
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
 max_index=${#bams_todo[*]}-1
-while [[ $INDEX -le $max_index ]]
+while [[ $INDEX -lt $max_index ]]
 do
     add_next_bam
 done
+if [[ $INDEX -eq $max_index ]]
+    then
+    add_final_bam
+fi
 
