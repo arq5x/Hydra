@@ -85,7 +85,7 @@ def main():
         parser.print_help()
         print
     else:
-        for (sample, file,size) in parse_config_stub(opts.config_stub):
+        for (sample, file, size) in parse_config_stub(opts.config_stub):
 
             bamfile = pysam.Samfile(file, "rb")
             isizes = []
