@@ -26,24 +26,6 @@ def get_mad(l):
         diff_from_median.append(abs(val - median))
     return get_median(diff_from_median)
 
-
-def meanstdv(x):
-    """
-    Calculate mean and standard deviation of data x[]:
-        mean = {\sum_i x_i \over n}
-        std = sqrt(\sum_i (x_i - mean)^2 \over n-1)
-    """
-    
-    n, mean, std = len(x), 0, 0
-    for a in x:
-        mean = mean + a
-    mean = mean / float(n)
-    for a in x:
-        std = std + (a - mean)**2
-    std = sqrt(std / float(n-1))
-    return mean, std
-
-
 def parse_config_stub(config_stub):
 	"""Yield each sample and filename from stub config file by bam size."""
 	stub_list = []
@@ -53,9 +35,8 @@ def parse_config_stub(config_stub):
 			sys.exit("config stub file should only have 2 fields")
 		sample, file = fields[0], fields[1]
 		file_size = os.path.getsize(file)
-		(sample, file, file_size) = sample, file, file_size
 		stub_list.append((sample, file, file_size))
-	"""Sort the stub list of sets by byte largest value"""
+	"""Sort the list of sets by the largest byte value"""
 	stub_list.sort(key=lambda x: x[2], reverse=True)
 	for item in stub_list:
 		yield item
