@@ -39,7 +39,6 @@ function extract_discordants {
 
 dataset_names=($(cut -f 1 $CONFIG))
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
-bams_todo=($(cut -f 2 $CONFIG)) # places output into an array                                                               
 
 max_index=${#bams_todo[*]}-1
 while [[ $INDEX -lt $max_index ]]
