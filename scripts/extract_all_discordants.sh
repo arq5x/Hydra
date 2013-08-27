@@ -24,7 +24,7 @@ function add_next_bam {
 }
 
 function add_final_bam {
-    extract_discordants ${bams_todo[$INDEX]}
+    extract_discordants ${bams_todo[$INDEX]} ${dataset_names[$INDEX]}
     wait
 }
 
@@ -33,12 +33,14 @@ function extract_discordants {
 	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
 	rm $1.disc.tmp.bam
-	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam
+	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam $2
 }
 
 
-
+dataset_names=($(cut -f 1 $CONFIG))
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
+bams_todo=($(cut -f 2 $CONFIG)) # places output into an array                                                               
+
 max_index=${#bams_todo[*]}-1
 while [[ $INDEX -lt $max_index ]]
 do
