@@ -12,12 +12,11 @@ PROCS=$2
 INDEX=0
 
 function poll {
-    #PROCS + 1 because the bash script is a job itself
-    while [[ $curr_jobs -ge PROCS+1 ]]
+    while [[ $curr_jobs -ge PROCS ]]
     do
 	curr_jobs=$(jobs -p | wc -l)
-	#curr_jobs=$(($currjobs-1))
 	sleep 2
+	wait $!
     done
 }
 
@@ -25,19 +24,16 @@ function poll {
 function add_next_bam {
     # if still jobs to do then add one
     curr_jobs=$(jobs -p | wc -l)
-    if [[ $curr_jobs -lt PROCS+1 ]]
+    if [[ $curr_jobs -lt PROCS ]]
     then
 	extract_discordants ${bams_todo[$INDEX]} & 
 	INDEX=$(($INDEX+1))
+    else
+	poll
     fi
-    poll
 
 }
 
-function add_final_bam {
-    extract_discordants ${bams_todo[$INDEX]} ${dataset_names[$INDEX]}
-    wait
-}
 
 function extract_discordants {
 	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
@@ -47,12 +43,11 @@ function extract_discordants {
 dataset_names=($(cut -f 1 $CONFIG))
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
 max_index=${#bams_todo[*]}-1
-while [[ $INDEX -lt $max_index ]]
+while [[ $INDEX -le $max_index ]]
 do
     add_next_bam
 done
-if [[ $INDEX -eq $max_index ]]
-    then
-    add_final_bam
-fi
+wait
+
+
 
