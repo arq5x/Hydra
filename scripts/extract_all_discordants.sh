@@ -40,6 +40,7 @@ function extract_discordants {
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
 	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam $2
 }
+
 dataset_names=($(cut -f 1 $CONFIG))
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
 max_index=${#bams_todo[*]}-1
