@@ -9,7 +9,6 @@ fi
 
 CONFIG=$1
 PROCS=$2
-COUNTER=0
 INDEX=0
 
 function poll {
