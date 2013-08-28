@@ -1,6 +1,9 @@
+#!/bin/bash
+set -e
+
 if [ -z $2 ]
 then
-	echo "usage:$0 <<hydra config file> <number of threads>"
+	echo "usage:$0 <<hydra config file> <number of theads>"
 	exit
 fi
 
@@ -9,18 +12,27 @@ PROCS=$2
 COUNTER=0
 INDEX=0
 
+function poll {
+    #PROCS + 1 because the bash script is a job itself
+    while [[ $curr_jobs -ge PROCS+1 ]]
+    do
+	curr_jobs=$(jobs -p | wc -l)
+	#curr_jobs=$(($currjobs-1))
+	sleep 2
+    done
+}
+
 
 function add_next_bam {
     # if still jobs to do then add one
-    if [[ $COUNTER -lt PROCS ]]
+    curr_jobs=$(jobs -p | wc -l)
+    if [[ $curr_jobs -lt PROCS+1 ]]
     then
-	COUNTER=$(($COUNTER+1))
-		extract_discordants ${bams_todo[$INDEX]} & 
-		INDEX=$(($INDEX+1))
-	else
-		wait
-		COUNTER=$(($COUNTER-$PROCS))
+	extract_discordants ${bams_todo[$INDEX]} & 
+	INDEX=$(($INDEX+1))
     fi
+    poll
+
 }
 
 function add_final_bam {
@@ -28,17 +40,13 @@ function add_final_bam {
     wait
 }
 
-
 function extract_discordants {
 	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
 	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam $2
 }
-
-
 dataset_names=($(cut -f 1 $CONFIG))
 bams_todo=($(cut -f 2 $CONFIG)) # places output into an array
-
 max_index=${#bams_todo[*]}-1
 while [[ $INDEX -lt $max_index ]]
 do
