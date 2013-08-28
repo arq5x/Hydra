@@ -3,7 +3,7 @@ set -e
 
 if [ -z $2 ]
 then
-	echo "usage:$0 <<hydra config file> <number of threads>"
+	echo "usage:$0 <<hydra config file> <number of processes>"
 	exit
 fi
 
