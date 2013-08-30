@@ -26,7 +26,7 @@ function add_next_bam {
     curr_jobs=$(jobs -p | wc -l)
     if [[ $curr_jobs -lt PROCS ]]
     then
-	extract_discordants ${bams_todo[$INDEX]} & 
+	extract_discordants ${bams_todo[$INDEX]}  ${dataset_name[$INDEX]} & 
 	INDEX=$(($INDEX+1))
     else
 	poll
