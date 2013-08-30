@@ -153,7 +153,7 @@ def main():
         metavar="FILE")
         
     parser.add_option("-d", dest="dataset",
-        help="dataset name",
+        help="Dataset name",
         metavar="FILE")
 
 
