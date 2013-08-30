@@ -38,7 +38,7 @@ function add_next_bam {
 function extract_discordants {
 	samtools view -bF 0x040E -f 0x001 $1 > $1.disc.tmp.bam
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
-	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam $2
+	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam -d $2
 }
 
 dataset_names=($(cut -f 1 $CONFIG))
