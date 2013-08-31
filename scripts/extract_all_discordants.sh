@@ -15,7 +15,7 @@ function poll {
     while [[ $curr_jobs -ge PROCS ]]
     do
 	curr_jobs=$(jobs -p | wc -l)
-	sleep 1
+	sleep 1 &
 	wait $!
     done
 }
