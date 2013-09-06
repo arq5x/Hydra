@@ -47,6 +47,8 @@ def countSamplesPerBreakpoint(detailFile, finalFile, sampleMap, sampleList):
 	    if s == 0:
 	       e = len(i)
 	       return i[s:e]
+        sys.stderr("Read name does not contain a valid dataset name from config file\n")
+        exit(1)
 
     numSamples = len(sampleMap)
     counts_Y = [0]*numSamples        
@@ -81,11 +83,16 @@ def main():
     parser.add_option("-f", dest="final", help="final filename", metavar="FILE")
     parser.add_option("-c", dest="config", help="config filename", metavar="FILE")
     parser.add_option("-x", action="store_false", dest="col", default=True, help="do not print column headers")
+
     (options, args) = parser.parse_args()
     # build a map of the samples
-    (sampleMap, sampleList) = mapSamples(options.config)
-    printHeader(sampleMap, sampleList)
-    countSamplesPerBreakpoint(options.detail, options.final, sampleMap, sampleList)
+    if options.config and options.detail and options.final:
+        (sampleMap, sampleList) = mapSamples(options.config)
+        printHeader(sampleMap, sampleList)
+        countSamplesPerBreakpoint(options.detail, options.final, sampleMap, sampleList)
+    else:
+        parser.print_help()
+        
 
         
         
