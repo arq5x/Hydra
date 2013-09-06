@@ -26,7 +26,7 @@ function add_next_assem {
     curr_jobs=$(jobs -p | wc -l)
     if [[ $curr_jobs -lt PROCS ]]
     then
-	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings 300000 & 
+	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings 1000*${#assems_todo[*]} & 
 	INDEX=$(($INDEX+1))
     else
 	poll
