@@ -12,6 +12,8 @@ Author:         Aaron Quinlan, Ph.D
 #include <ctime>
 #include "Ancillary.h"
 #include "ExternalMergeSort.h"
+#include <sys/stat.h> 
+#include <fcntl.h>
 
 // make
 HydraPE::HydraPE(vector<DNALIB> libraries, string routedFileList,
