@@ -79,11 +79,11 @@ def main():
     parser = OptionParser()
     parser.add_option("-d", dest="detail", help="detail filename", metavar="FILE")
     parser.add_option("-f", dest="final", help="final filename", metavar="FILE")
-    parser.add_option("-s", dest="samples", help="samples filename", metavar="FILE")
+    parser.add_option("-c", dest="config", help="config filename", metavar="FILE")
     parser.add_option("-x", action="store_false", dest="col", default=True, help="do not print column headers")
     (options, args) = parser.parse_args()
     # build a map of the samples
-    (sampleMap, sampleList) = mapSamples(options.samples)
+    (sampleMap, sampleList) = mapSamples(options.config)
     printHeader(sampleMap, sampleList)
     countSamplesPerBreakpoint(options.detail, options.final, sampleMap, sampleList)
 
