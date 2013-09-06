@@ -26,7 +26,7 @@ function add_next_assem {
     curr_jobs=$(jobs -p | wc -l)
     if [[ $curr_jobs -lt PROCS ]]
     then
-	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings 1000*${#assems_todo[*]} & 
+	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings $[1000*num_datasets] & 
 	INDEX=$(($INDEX+1))
     else
 	poll
@@ -35,6 +35,7 @@ function add_next_assem {
 
 
 assems_todo=($(cat $ROUTED_FILES)) # places output into an array
+num_datasets=($(wc -l $CONFIG))
 max_index=${#assems_todo[*]}-1
 while [[ $INDEX -le $max_index ]]
 do
