@@ -1,15 +1,16 @@
 #!/bin/bash
 set -e
 
-if [ -z $3 ]
+if [ -z $4 ]
 then
-	echo "usage:$0 <file w/ list of routed files> <hydra config file> <number of processes>"
+	echo "usage:$0 <file w/ list of routed files> <hydra config file> <number of processes> <punt parameter>"
 	exit
 fi
 
 CONFIG=$1
 ROUTED_FILES=$2
 PROCS=$3
+PUNT=$4
 INDEX=0
 
 function poll {
@@ -26,7 +27,7 @@ function add_next_assem {
     curr_jobs=$(jobs -p | wc -l)
     if [[ $curr_jobs -lt PROCS ]]
     then
-	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings $[1000*num_datasets] & 
+	hydra-assembler -config $CONFIG -routed ${assems_todo[$INDEX]} -maxMappings $(($[num_datasets]*$PUNT)) & 
 	INDEX=$(($INDEX+1))
     else
 	poll
