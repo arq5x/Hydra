@@ -64,7 +64,7 @@ echo "done"
 
 
 echo "extracting discordant alignments from BAM files...\c"
-sh scripts/extract_all_discordants.sh config.hydra.txt $threads
+sh scripts/extract_all_discordants.sh config.hydra.txt $THREADS
 echo "done"
 
 
