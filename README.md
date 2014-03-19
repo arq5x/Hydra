@@ -3,7 +3,7 @@
 
 ##Installation
 
-0. Requirements
+###Requirements
 =========================
 1. samtools
 2. pysam
@@ -12,7 +12,7 @@
 The ulimit is based on the number of chromosomes present in the reference.
 This number must be larger than 4*number of possible chromosome-chromosome combinations.
 
-###Installaing
+####Installaing
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
@@ -20,9 +20,11 @@ This number must be larger than 4*number of possible chromosome-chromosome combi
 	sudo cp Hydra/scripts/* /usr/local/bin
 	sudo cp Hydra/bin/* /usr/local/bin
 
-##Running Hydra-Multi
-	chmod +x test-hydra-multi.sh
-	./test-hydra-multi.sh
+####Testing Hydra-Multi
+	chmod +x run-hydra-multi.sh
+	./run-hydra-multi.sh -test
+	
+##Installation
 
 1. Generate a config file.
 ==========================
