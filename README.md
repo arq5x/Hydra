@@ -7,6 +7,8 @@ HydraMulti - an SV discovery tool that incorporates hundreds of samples
 2. pysam
 3. set ulimit -f (number of open file handles) to 16384 (for hg19).
 
+The ulimit is based on the number of chromosomes present in the reference.
+This number must be larger than 4*number of possible chromosome-chromosome combinations.
 
 1. Generate a config file.
 ==========================
