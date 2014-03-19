@@ -5,9 +5,9 @@
 
 ###Requirements
 =========================
-1. samtools
-2. pysam
-3. set ulimit -f (number of open file handles) to 16384 (for hg19).
+1. [samtools](http://samtools.sourceforge.net/)
+2. [pysam](https://code.google.com/p/pysam/)
+3. `$ set ulimit -f 16384`
 
 The ulimit is based on the number of chromosomes present in the reference.
 This number must be larger than 4*number of possible chromosome-chromosome combinations.
@@ -24,7 +24,7 @@ This number must be larger than 4*number of possible chromosome-chromosome combi
 	chmod +x run-hydra-multi.sh
 	./run-hydra-multi.sh -test
 	
-##Installation
+##Running Hydra-Multi
 
 1. Generate a config file.
 ==========================
