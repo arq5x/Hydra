@@ -53,7 +53,7 @@ echo "done"
 
 echo "creating a basic configuration file from the downloaded 1000G files...\c"
 echo -e "HG00096\tHG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
-HG00419\tHG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
+HG00689\tHG00689.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
 HG01615\tHG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam" > config.stub.txt
 echo "done"
 
