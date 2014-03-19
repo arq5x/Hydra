@@ -46,7 +46,7 @@ done
 
 echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
 wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
-wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00419/alignment/HG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
+wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00689/alignment/HG00689.chrom11.ILLUMINA.bwa.CHS.low_coverage.20120522.bam
 wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG01615/alignment/HG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam
 echo "done"
 
