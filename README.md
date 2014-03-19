@@ -1,5 +1,7 @@
-HydraMulti - an SV discovery tool that incorporates hundreds of samples
+#HydraMulti - an SV discovery tool that incorporates hundreds of samples
 =======================================================================
+
+##Installation
 
 0. Requirements
 =========================
@@ -9,6 +11,18 @@ HydraMulti - an SV discovery tool that incorporates hundreds of samples
 
 The ulimit is based on the number of chromosomes present in the reference.
 This number must be larger than 4*number of possible chromosome-chromosome combinations.
+
+###Installaing
+git clone https://github.com/arq5x/Hydra
+cd Hydra
+make 
+chmod +x Hydra/scripts/*
+sudo cp Hydra/scripts/* /usr/local/bin
+sudo cp Hydra/bin/* /usr/local/bin
+
+##Running Hydra-Multi
+chmod +x test-hydra-multi.sh
+./test-hydra-multi.sh
 
 1. Generate a config file.
 ==========================
@@ -63,7 +77,7 @@ file for the `sample1.pos.bam` input file listed in the config file:
     python scripts/extract_discordants.py -i config.hydra.txt
 
 
-3. Run HydraRouter.
+3. Run HydraRouter
 =================================
 
     $ hydra-router -config config.hydra.txt -routedList routed-files.txt
