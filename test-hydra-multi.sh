@@ -1,5 +1,5 @@
 #!/bin/bash
-
+usage()
 {
     cat << EOF
 
@@ -7,8 +7,8 @@ usage: $0 OPTIONS
 
 OPTIONS can be:
     -h      Show this message
-    -f      Filename
-    -v      Verbose (boolean)
+    -t      Number of threads [Default: 1]
+    -p      Punt parameter (suggested maximum coverage of datasets analyzed) [Default: 10]
 
 EOF
 }
@@ -20,11 +20,11 @@ then
     exit
 fi
 
-VERBOSE=
-FILENAME=
+THREADS=1
+PUNT=10
 
 # Check options passed in.
-while getopts "h f:v" OPTION
+while getopts "h t:p" OPTION
 do
     case $OPTION in
         h)
@@ -32,10 +32,10 @@ do
             exit 1
             ;;
         f)
-            FILENAME=$OPTARG
+            THREADS=$OPTARG
             ;;
         v)
-            VERBOSE=1
+            PUNT=$OPTARG
             ;;
         ?)
             usage
@@ -43,21 +43,6 @@ do
             ;;
     esac
 done
-
-# Do something with the arguments...
-
-## END SCRIPT
-
-
-
-if [ -z $1 ]
-then
-        echo "usage:$0 <number of processes> <punt>"
-        exit
-fi
-
-threads=$1
-punt=$2
 
 echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
 wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
@@ -89,7 +74,7 @@ echo "done"
 
 
 echo "running hydra-assembler on the routed files of discordant alignments...\c"
-sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt $threads $punt
+sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
 echo "done"
 
 
