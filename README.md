@@ -7,7 +7,7 @@
 =========================
 1. [samtools](http://samtools.sourceforge.net/)
 2. [pysam](https://code.google.com/p/pysam/)
-3. `$ set ulimit -f 16384`
+3. `set ulimit -f 16384`
 
 The ulimit is based on the number of chromosomes present in the reference.
 This number must be larger than 4*number of possible chromosome-chromosome combinations.
