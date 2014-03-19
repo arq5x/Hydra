@@ -1,3 +1,64 @@
+#!/bin/bash
+
+{
+    cat << EOF
+
+usage: $0 OPTIONS
+
+OPTIONS can be:
+    -h      Show this message
+    -f      Filename
+    -v      Verbose (boolean)
+
+EOF
+}
+
+# Show usage when there are no arguments.
+if test -z "$2"
+then
+    usage
+    exit
+fi
+
+VERBOSE=
+FILENAME=
+
+# Check options passed in.
+while getopts "h f:v" OPTION
+do
+    case $OPTION in
+        h)
+            usage
+            exit 1
+            ;;
+        f)
+            FILENAME=$OPTARG
+            ;;
+        v)
+            VERBOSE=1
+            ;;
+        ?)
+            usage
+            exit
+            ;;
+    esac
+done
+
+# Do something with the arguments...
+
+## END SCRIPT
+
+
+
+if [ -z $1 ]
+then
+        echo "usage:$0 <number of processes> <punt>"
+        exit
+fi
+
+threads=$1
+punt=$2
+
 echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
 wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
 wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00419/alignment/HG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
@@ -5,7 +66,7 @@ wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG01615/alignment/HG01615
 echo "done"
 
 
-echo "creating a basic configuration file from the downloaded 100G files...\c"
+echo "creating a basic configuration file from the downloaded 1000G files...\c"
 echo "HG00096\tHG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
 HG00419\tHG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
 HG01615\tHG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam" > config.stub.txt
@@ -18,7 +79,7 @@ echo "done"
 
 
 echo "extracting discordant alignments from BAM files...\c"
-sh scripts/extract_all_discordants.sh config.hydra.txt 2
+sh scripts/extract_all_discordants.sh config.hydra.txt $threads
 echo "done"
 
 
@@ -28,7 +89,7 @@ echo "done"
 
 
 echo "running hydra-assembler on the routed files of discordant alignments...\c"
-sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt
+sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt $threads $punt
 echo "done"
 
 
