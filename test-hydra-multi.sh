@@ -20,22 +20,27 @@ then
     exit
 fi
 
+TEST=0
 THREADS=1
 PUNT=10
 
+
 # Check options passed in.
-while getopts "h t:p" OPTION
+while getopts "h test t:p" OPTION
 do
     case $OPTION in
         h)
             usage
             exit 1
             ;;
-        f)
+        t)
             THREADS=$OPTARG
             ;;
-        v)
+        p)
             PUNT=$OPTARG
+            ;;
+        test)
+            TEST=1
             ;;
         ?)
             usage
@@ -101,3 +106,17 @@ echo "done"
 
 # 1000G call
 # http://genome.ucsc.edu/cgi-bin/hgc?hgsid=327887259&c=chr11&o=1915273&t=1936956&g=tgpPhase1&i=G%2F%3CDEL%3E
+
+
+case "$1" in 
+    'run')
+	run "${@:2}"
+	;;
+    'test')
+	test "${@:2}"
+    *)
+	usage
+	echo -e "Error: command \"$1\" not recognized\n"
+	exit 1
+esac
+
