@@ -4,8 +4,8 @@ usage()
 	echo "
 	usage: hydra-multi.sh <command> [options]
 	command:
-	test	perform a test run of Hydra-Multi with 3 sample datasets
-	run	perform a run of Hydra-Multi
+	test	perform a test of Hydra-Multi using 3 sample 1000 Genomes datasets
+	run	execute Hydra-Multi
 	options: -h	show this help
 "
 }
@@ -113,21 +113,21 @@ function test() {
 
 if test -z "$1"
 then
-    usage
-    exit 1
+	usage
+	exit 1
 fi
 
 while getopts "h" OPTION
 do
     case $OPTION in
         h)
-            usage
-            exit 1
-            ;;
-        ?)
-            usage
-            exit
-            ;;
+        	usage
+        	exit 1
+        	;;
+	?)
+		usage
+		exit 1
+		;;
     esac
 done
 
