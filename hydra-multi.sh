@@ -138,7 +138,7 @@ usage()
 #	echo "done"
 #}
 
-if test -z "$2"
+if test -z "$1"
 then
     usage
     exit 1
