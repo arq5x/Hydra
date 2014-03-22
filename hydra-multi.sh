@@ -15,11 +15,10 @@ function run() {
 		"echo how to use run
 		"
 	}
-	if test -z "$2"
-    then
+	if test -z "$2"; then
 		run_usage
 		exit 1
-    fi
+    	fi
 	PUNT=10
 	THREADS=2
 	while getopts "h t:p" OPTION
@@ -91,11 +90,10 @@ function test() {
 		"echo how to use test
 		"
 	}
-	if test -z "$1"
-    then
+	if test -z "$1"; then
 		run_usage
 		exit 1
-    fi
+    	fi
 	echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00689/alignment/HG00689.chrom11.ILLUMINA.bwa.CHS.low_coverage.20120522.bam
