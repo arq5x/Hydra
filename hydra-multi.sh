@@ -160,7 +160,8 @@ done
 
 case "$1" in 
     'test')
-	test "${@:2}"
+	test
+	;;
     *)
 	usage
 	echo -e "Error: command \"$1\" not recognized\n"
