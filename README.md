@@ -1,24 +1,24 @@
-#Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
+Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 =======================================================================
 
-##Overview
+#Overview
 
 Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds of samples.
 
-##Installation
+#Installation
 =========================
 Below are the requirements and instructions for installation of Hydra-Multi. 
 
-###Requirements
+##Requirements
 1. [samtools](http://samtools.sourceforge.net/)
 2. [pysam](https://code.google.com/p/pysam/)
 3. `set ulimit -f 16384`
 
 The ulimit determines the number of open file handles on a system.  
-This number must be larger than 4*number of possible chromosome-chromosome combinations found in the desired reference genome.  
+This number must be larger than 4*number of possible chromosome-chromosome combinations in the respective reference.  
 For the human reference (hg19 b37), 16384 is the recommended ulimit.
 
-####Installaing
+###Installaing
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
@@ -26,11 +26,11 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	sudo cp Hydra/scripts/* /usr/local/bin
 	sudo cp Hydra/bin/* /usr/local/bin
 
-####Testing Hydra-Multi
+###Testing Hydra-Multi
 	chmod +x hydra-multi.sh
 	./hydra-multi.sh test
 	
-##Running Hydra-Multi
+#Running Hydra-Multi
 ==========================
 A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions require a stub file to create a config file.  
 
@@ -43,7 +43,7 @@ Start with a simple config file "stub" such as the one below:
     sample2	/full/path/to/file/sample2.pos.bam
     sample3	/full/path/to/file/sample3.pos.bam
 
-###Automatic Execution
+##Automatic Execution
 ==========================
 
 hydra-multi.sh can then then be used to execute subsequent steps:
@@ -55,8 +55,10 @@ To obtain a parameter list for running hydra-multi:
 	./hydra-multi.sh run -h
 
 	
-###Manual Execution 
-1. Generate a config file.
+##Manual Execution 
+==========================
+
+###1. Generate a config file.
 ==========================
 
 HydraMulti needs a configuration file documenting the sample/libraries and the
