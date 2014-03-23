@@ -6,7 +6,6 @@ Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds of samples.
 
 #Installation
-=========================
 Below are the requirements and instructions for installation of Hydra-Multi. 
 
 ##Requirements
@@ -31,7 +30,6 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	./hydra-multi.sh test
 	
 #Running Hydra-Multi
-==========================
 A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions require a stub file to create a config file.  
 
 ###0. Generate a stub file.
@@ -44,8 +42,6 @@ Start with a simple config file "stub" such as the one below:
     sample3	/full/path/to/file/sample3.pos.bam
 
 ##Automatic Execution
-==========================
-
 hydra-multi.sh can then then be used to execute subsequent steps:
 
 	./hydra-multi.sh run config.stub.txt
@@ -56,7 +52,6 @@ To obtain a parameter list for running hydra-multi:
 
 	
 ##Manual Execution 
-==========================
 
 ###1. Generate a config file.
 ==========================
