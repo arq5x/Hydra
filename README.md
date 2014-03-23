@@ -1,14 +1,15 @@
-Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
+#Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 =======================================================================
 
-#Overview
+##Overview
 
 Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds of samples.
 
-#Installation
-
-##Requirements
+##Installation
 =========================
+Below are the requirements and instructions for installation of Hydra-Multi. 
+
+###Requirements
 1. [samtools](http://samtools.sourceforge.net/)
 2. [pysam](https://code.google.com/p/pysam/)
 3. `set ulimit -f 16384`
@@ -17,7 +18,7 @@ The ulimit determines the number of open file handles on a system.
 This number must be larger than 4*number of possible chromosome-chromosome combinations found in the desired reference genome.  
 For the human reference (hg19 b37), 16384 is the recommended ulimit.
 
-###Installaing
+####Installaing
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
@@ -25,15 +26,15 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	sudo cp Hydra/scripts/* /usr/local/bin
 	sudo cp Hydra/bin/* /usr/local/bin
 
-###Testing Hydra-Multi
+####Testing Hydra-Multi
 	chmod +x hydra-multi.sh
 	./hydra-multi.sh test
 	
-#Running Hydra-Multi
+##Running Hydra-Multi
 ==========================
 A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions require a stub file to create a config file.  
 
-##0. Generate a stub file.
+###0. Generate a stub file.
 ==========================
 Start with a simple config file "stub" such as the one below:
 
