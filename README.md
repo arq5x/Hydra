@@ -30,7 +30,7 @@ A ulimit of 16384 is recommended for the human reference (hg19 b37).
 
 A wrapper script can be used to run Hydra-Multi (hydra-multi.sh) or each step may be executed manually.
 
-1. Generate a stub file.
+0. Generate a stub file.
 ==========================
 Start with a simple config file "stub" such as the one below:
 
@@ -39,11 +39,16 @@ Start with a simple config file "stub" such as the one below:
     sample2	/full/path/to/file/sample2.pos.bam
     sample3	/full/path/to/file/sample3.pos.bam
 
-The wrapper script can then then be used to execute subsequent steps with the following:
+###Automatic Execution
+==========================
+
+The script hydra-multi.sh can then then be used to execute subsequent steps with the following:
 
 	./hydra-multi.sh run config.stub.txt
-
-2. Generate a config file.
+	
+	
+###Manual Execution 
+1. Generate a config file.
 ==========================
 
 HydraMulti needs a configuration file documenting the sample/libraries and the
