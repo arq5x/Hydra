@@ -9,8 +9,10 @@
 2. [pysam](https://code.google.com/p/pysam/)
 3. `set ulimit -f 16384`
 
-The ulimit is based on the number of chromosomes present in the reference.
-This number must be larger than 4*number of possible chromosome-chromosome combinations.
+The ulimit is based on the number of chromosomes present in the reference.  
+This number must be larger than 4*number of possible chromosome-chromosome combinations.  
+A ulimit of 16384 is recommended for the human reference (hg19 b37).  
+
 
 ####Installaing
 	git clone https://github.com/arq5x/Hydra
@@ -21,25 +23,33 @@ This number must be larger than 4*number of possible chromosome-chromosome combi
 	sudo cp Hydra/bin/* /usr/local/bin
 
 ####Testing Hydra-Multi
-	chmod +x run-hydra-multi.sh
-	./run-hydra-multi.sh -test
+	chmod +x hydra-multi.sh
+	./hydra-multi.sh test
 	
 ##Running Hydra-Multi
 
-1. Generate a config file.
+A wrapper script can be used to run Hydra-Multi (hydra-multi.sh) or each step may be executed manually.
+
+1. Generate a stub file.
 ==========================
-
-HydraMulti needs a configuration file documenting the sample/libraries and the
-paths to their respective BAM files that will be input to SV discovery process.
-
-If you start with a simple config file "stub" such as the one below:
+Start with a simple config file "stub" such as the one below:
 
     $ cat config.stub.txt
     sample1	/full/path/to/file/sample1.pos.bam
     sample2	/full/path/to/file/sample2.pos.bam
     sample3	/full/path/to/file/sample3.pos.bam
 
-the `make_hydra_config.py` script will inspect the alignments in each sample's
+The wrapper script can then then be used to execute subsequent steps with the following:
+
+	./hydra-multi.sh run config.stub.txt
+
+2. Generate a config file.
+==========================
+
+HydraMulti needs a configuration file documenting the sample/libraries and the
+paths to their respective BAM files that will be input to SV discovery process.
+
+The `make_hydra_config.py` script will inspect the alignments in each sample's
 BAM file to automatically create a complete config file documenting the
 statistics of the fragment library:
 
