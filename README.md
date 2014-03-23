@@ -1,13 +1,13 @@
-#Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
+Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 =======================================================================
 
-##Overview
+#Overview
 
 Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds of samples.
 
-##Installation
+#Installation
 
-###Requirements
+##Requirements
 =========================
 1. [samtools](http://samtools.sourceforge.net/)
 2. [pysam](https://code.google.com/p/pysam/)
@@ -17,7 +17,7 @@ The ulimit determines the number of open file handles on a system.
 This number must be larger than 4*number of possible chromosome-chromosome combinations found in the desired reference genome.  
 For the human reference (hg19 b37), 16384 is the recommended ulimit.
 
-####Installaing
+###Installaing
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
@@ -25,15 +25,15 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	sudo cp Hydra/scripts/* /usr/local/bin
 	sudo cp Hydra/bin/* /usr/local/bin
 
-####Testing Hydra-Multi
+###Testing Hydra-Multi
 	chmod +x hydra-multi.sh
 	./hydra-multi.sh test
 	
-##Running Hydra-Multi
+#Running Hydra-Multi
 ==========================
 A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions require a stub file to create a config file.  
 
-0. Generate a stub file.
+##0. Generate a stub file.
 ==========================
 Start with a simple config file "stub" such as the one below:
 
@@ -76,7 +76,7 @@ ready to go:
     python scripts/make_hydra_config.py -i config.stub.txt > config.hydra.txt
 
 
-2. Extract discordant alignments.
+###2. Extract discordant alignments.
 =================================
 Once you have created a configuration file for HydraMulti, you need to run the
 `extract_discordants.py` script to, you guessed it, extract the discordant 
@@ -101,25 +101,25 @@ file for the `sample1.pos.bam` input file listed in the config file:
     python scripts/extract_discordants.py -i config.hydra.txt
 
 
-3. Run HydraRouter
+###3. Run HydraRouter
 =================================
 
     $ hydra-router -config config.hydra.txt -routedList routed-files.txt
 
 
-4. Assemble SV breakpoint clusters
+###4. Assemble SV breakpoint clusters
 ==================================
 
     $ sh scripts/assemble-routed-files.sh routed-files-test.txt config.hydra.txt
 
 
-5. Combine the individual SV assembly files into a single file.
+###5. Combine the individual SV assembly files into a single file.
 ===============================================================
 
     $ sh scripts/combine-assembled-files.sh /full/path/to/assembled/files/ all.assembled
 
 
-6. Finalize the SV breakpoint predictions.
+###6. Finalize the SV breakpoint predictions.
 ===============================================================
 
     $ scripts/forceOneClusterPerPairMem.py -i all.assembled -o all.sv-calls
