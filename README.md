@@ -30,7 +30,7 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	./hydra-multi.sh test
 	
 #Running Hydra-Multi
-A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions require a stub file to create a config file.  
+A wrapper script (hydra-multi.sh) can be used to automatiically run Hydra-Multi or each step may be performed manually. Both the automatic and manual executions begin by creating a stub file.  
 
 ###0. Generate a stub file.
 ==========================
