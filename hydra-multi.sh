@@ -117,7 +117,7 @@ then
 	exit 1
 fi
 
-while getopts "h" OPTION
+while getopts ":h" OPTION
 do
     case $OPTION in
         h)
