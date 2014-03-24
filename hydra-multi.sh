@@ -33,7 +33,7 @@ function test() {
 	
 	
 	echo "extracting discordant alignments from BAM files...\c"
-	sh scripts/extract_all_discordants.sh config.hydra.txt $THREADS
+	sh extract_all_discordants.sh config.hydra.txt $THREADS
 	echo "done"
 	
 	
@@ -97,12 +97,12 @@ function run() {
 	done
 	
 	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-	python scripts/make_hydra_config.py -i $STUB > config.$OUT.txt
+	python make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
 	
 	
 	echo -e "extracting discordant alignments from BAM files using " $THREADS " threads...\c"
-	sh scripts/extract_all_discordants.sh config.$OUT.txt $THREADS
+	sh extract_all_discordants.sh config.$OUT.txt $THREADS
 	echo "done"
 	
 	
@@ -112,17 +112,17 @@ function run() {
 	
 	
 	echo -e "running hydra-assembler on the routed files of discordant alignments using " $THREADS " threads and punting at read depth of 10...\c"
-	sh scripts/assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
+	sh assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
 	echo "done"
 	
 	
 	echo "re-combining the individual assembled files...\c"
-	sh scripts/combine-assembled-files.sh   ./   all.$OUT.assembled
+	sh combine-assembled-files.sh   ./   all.$OUT.assembled
 	echo "done"
 	
 	
 	echo "finalizing SV breakpoint calls...\c"
-	python scripts/finalizeBreakpoints.py -i all.$OUT.assembled -o all.$OUT.sv
+	python finalizeBreakpoints.py -i all.$OUT.assembled -o all.$OUT.sv
 	echo "done"
 }
 
