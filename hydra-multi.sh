@@ -61,40 +61,68 @@ function test() {
 function run() {
 	function run_usage() {
 		echo "
-		how to use test"
+		usage:   hydra-multi.sh run [options] <stub_file>
+		
+		positional arguments:
+			stub file
+				the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
+		options:
+			-t INT	Number of threads to use. [Default: 2]
+			-p INT	The punt parameter for assembly, the maximum read depth allowed. [Default: 10]
+			-o STR	The stub for the output file names"
 	}
+	
 	if test -z "$2"; then
 		run_usage
 		exit 1
-    	fi
-
+	fi
+	THREADS=2
+	PUNT=2
+	OUT="hydra"
+	STUB="${@:${OPTIND}:1}"
+	while getopts ":t:p:o:" OPTION
+	do
+		case "${OPTION}" in
+			h)
+				run_usage
+				exit 1
+				;;
+			t)
+				THREADS="$OPTARG"
+				;;
+			o)
+				OUT="$OPTARG"
+				;;
+		esac
+	done
+	
 	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-	python scripts/make_hydra_config.py -i config.stub.txt > config.hydra.txt
+	python scripts/make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
 	
 	
-	echo "extracting discordant alignments from BAM files using 2 threads...\c"
-	sh scripts/extract_all_discordants.sh config.hydra.txt 2
+	echo -e "extracting discordant alignments from BAM files using " $THREADS " threads...\c"
+	sh scripts/extract_all_discordants.sh config.$OUT.txt $THREADS
 	echo "done"
 	
 	
 	echo "running hydra router on the discordant alignments...\c"
-	hydra-router -config config.hydra.txt -routedList routed-files.txt
+	hydra-router -config config.$OUT.txt -routedList routed-files.$OUT.txt
 	echo "done"
 	
 	
-	echo "running hydra-assembler on the routed files of discordant alignments using 2 threads and punting at read depth of 10...\c"
-	sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
+	echo -e "running hydra-assembler on the routed files of discordant alignments using " $THREADS " threads and punting at read depth of 10...\c"
+	sh scripts/assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
 	echo "done"
 	
 	
 	echo "re-combining the individual assembled files...\c"
-	sh scripts/combine-assembled-files.sh   ./   all.1000G.assembled
+	sh scripts/combine-assembled-files.sh   ./   all.$OUT.assembled
 	echo "done"
 	
 	
 	echo "finalizing SV breakpoint calls...\c"
-	python scripts/finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
+	python scripts/finalizeBreakpoints.py -i all.$OUT.assembled -o all.$OUT.sv
 	echo "done"
 }
 
@@ -104,13 +132,15 @@ then
 	exit 1
 fi
 
-while getopts "?:h" OPTION
+while getopts "K:h" OPTION
 do
-    case $OPTION in
-        h)
-        	usage
-        	exit 1
-        	;;
+	case $OPTION in
+	h)
+		usage
+		exit 1
+		;;
+	K)
+		;;
 	?)
 		usage
 		exit 1
@@ -120,10 +150,10 @@ done
 
 case "$1" in 
 	'test')
-		test
+		test "${@:2}"
 		;;
 	'run')
-		run
+		run "${@:2}"
 		;;
 	*)
 		usage
