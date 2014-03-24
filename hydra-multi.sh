@@ -1,5 +1,5 @@
 #!/bin/bash
-usage()
+function usage()
 {
 	echo "
 	usage: hydra-multi.sh <command> [options]
