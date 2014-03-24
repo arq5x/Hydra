@@ -274,9 +274,9 @@ int main(int argc, char* argv[]) {
         }
         if (crumbs == false) {
 	   //we need to clean up
-	   events->RemoveMasterChromStrandFiles()
-	   events->RemovePositionSortedFiles()
-	   events->RemovePositionClusterFiles()
+	   events->RemoveMasterChromStrandFiles();
+	   events->RemovePositionSortedFiles();
+	   events->RemovePositionClusterFiles();
         }
         }
         return 0;
