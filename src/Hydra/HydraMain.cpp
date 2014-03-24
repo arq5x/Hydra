@@ -278,7 +278,6 @@ int main(int argc, char* argv[]) {
 	   events->RemovePositionSortedFiles();
 	   events->RemovePositionClusterFiles();
         }
-        }
         return 0;
     }
     else {
@@ -330,7 +329,7 @@ void ShowHelp(void) {
     cerr << "  \t\"all\"\tUse all mappings for each pair." << endl;
     cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl;
     
-    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl 
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl; 
     cerr << "  -crumbs\tHydra will leave temporary files." << end << endl;
     
     // end the program here
