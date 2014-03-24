@@ -28,7 +28,7 @@ function test() {
 	
 	
 	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-	python scripts/make_hydra_config.py -i config.stub.txt > config.hydra.txt
+	python make_hydra_config.py -i config.stub.txt > config.hydra.txt
 	echo "done"
 	
 	
@@ -43,17 +43,17 @@ function test() {
 	
 	
 	echo "running hydra-assembler on the routed files of discordant alignments...\c"
-	sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
+	sh assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
 	echo "done"
 	
 	
 	echo "re-combining the individual assembled files...\c"
-	sh scripts/combine-assembled-files.sh   ./   all.1000G.assembled
+	sh combine-assembled-files.sh   ./   all.1000G.assembled
 	echo "done"
 	
 	
 	echo "finalizing SV breakpoint calls...\c"
-	python scripts/finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
+	python finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
 	echo "done"
 }
 
