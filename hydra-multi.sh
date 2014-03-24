@@ -61,15 +61,15 @@ function test() {
 function run() {
 	function run_usage() {
 		echo "
-		usage:   hydra-multi.sh run [options] <stub_file>
-		
-		positional arguments:
-			stub file
-				the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
-		options:
-			-t INT	Number of threads to use. [Default: 2]
-			-p INT	The punt parameter for assembly, the maximum read depth allowed. [Default: 10]
-			-o STR	The stub for the output file names"
+	usage:   hydra-multi.sh run [options] <stub_file>
+	
+	positional arguments:
+		stub file
+			the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
+	options:
+		-t INT	Number of threads to use. [Default: 2]
+		-p INT	The punt parameter for assembly, the maximum read depth allowed. [Default: 10]
+		-o STR	The stub for the output file names"
 	}
 	
 	if [[ -z "$2" ]]; then
