@@ -28,12 +28,12 @@ function test() {
 	
 	
 	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-	python make_hydra_config.py -i config.stub.txt > config.hydra.txt
+	make_hydra_config.py -i config.stub.txt > config.hydra.txt
 	echo "done"
 	
 	
 	echo "extracting discordant alignments from BAM files...\c"
-	sh extract_all_discordants.sh config.hydra.txt $THREADS
+	extract_all_discordants.sh config.hydra.txt $THREADS
 	echo "done"
 	
 	
@@ -43,17 +43,17 @@ function test() {
 	
 	
 	echo "running hydra-assembler on the routed files of discordant alignments...\c"
-	sh assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
+	assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
 	echo "done"
 	
 	
 	echo "re-combining the individual assembled files...\c"
-	sh combine-assembled-files.sh   ./   all.1000G.assembled
+	combine-assembled-files.sh   ./   all.1000G.assembled
 	echo "done"
 	
 	
 	echo "finalizing SV breakpoint calls...\c"
-	python finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
+	finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
 	echo "done"
 }
 
@@ -97,12 +97,12 @@ function run() {
 	done
 	
 	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-	python make_hydra_config.py -i $STUB > config.$OUT.txt
+	make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
 	
 	
 	echo -e "extracting discordant alignments from BAM files using " $THREADS " threads...\c"
-	sh extract_all_discordants.sh config.$OUT.txt $THREADS
+	extract_all_discordants.sh config.$OUT.txt $THREADS
 	echo "done"
 	
 	
@@ -112,17 +112,17 @@ function run() {
 	
 	
 	echo -e "running hydra-assembler on the routed files of discordant alignments using " $THREADS " threads and punting at read depth of 10...\c"
-	sh assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
+	assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
 	echo "done"
 	
 	
 	echo "re-combining the individual assembled files...\c"
-	sh combine-assembled-files.sh   ./   all.$OUT.assembled
+	combine-assembled-files.sh   ./   all.$OUT.assembled
 	echo "done"
 	
 	
 	echo "finalizing SV breakpoint calls...\c"
-	python finalizeBreakpoints.py -i all.$OUT.assembled -o all.$OUT.sv
+	finalizeBreakpoints.py -i all.$OUT.assembled -o all.$OUT.sv
 	echo "done"
 }
 
