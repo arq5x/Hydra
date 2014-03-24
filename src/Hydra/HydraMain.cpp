@@ -169,11 +169,12 @@ int main(int argc, char* argv[]) {
                 cerr << "  Maximum mappings allowed before \"punting\": " << maxMappings << endl;
                 i++;
             }
+        }
 	else if(PARAMETER_CHECK("-crumbs", 7, parameterLength)) {
-            if ((i+1) < argc) {
-                maxMappings     = true;
-                i++;
-            }
+            crumbs= true;
+            cerr << "  Leave crumbs (temp files). " << endl;
+
+	}
         else if(PARAMETER_CHECK("-is", 3, parameterLength)) {
             ignoreSize = true;
             cerr << "  Break cluster ties based on edit distance instead of size. " << endl;
