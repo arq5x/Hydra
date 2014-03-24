@@ -96,12 +96,12 @@ function run() {
 		esac
 	done
 	
-	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
+	echo -e "creating a complete configuration file by sampling BAM to create library stats...\c"
 	make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
 	
 	
-	echo -e "extracting discordant alignments from BAM files using " $THREADS " threads...\c"
+	echo -e "extracting discordant alignments from BAM files using "$THREADS" threads...\n\c"
 	extract_all_discordants.sh config.$OUT.txt $THREADS
 	echo "done"
 	
@@ -111,7 +111,7 @@ function run() {
 	echo "done"
 	
 	
-	echo -e "running hydra-assembler on the routed files of discordant alignments using " $THREADS " threads and punting at read depth of 10...\c"
+	echo -e "running hydra-assembler on the routed files of discordant alignments using "$THREADS" threads and punting at read depth of "$PUNT"...\n\c"
 	assemble-routed-files.sh config.$OUT.txt routed-files.$OUT.txt $THREADS $PUNT
 	echo "done"
 	
