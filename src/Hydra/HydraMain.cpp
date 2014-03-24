@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
     bool haveMaxLinkedDistance  = false;
     bool lumpInversions         = false;
     bool ignoreSize             = false;
+    bool crumbs                 = false;
 
     string mappingUsage         = "best";
     unsigned int editBeyondBest = 0;
@@ -166,6 +167,11 @@ int main(int argc, char* argv[]) {
             if ((i+1) < argc) {
                 maxMappings     = atoi(argv[i + 1]);
                 cerr << "  Maximum mappings allowed before \"punting\": " << maxMappings << endl;
+                i++;
+            }
+	else if(PARAMETER_CHECK("-crumbs", 7, parameterLength)) {
+            if ((i+1) < argc) {
+                maxMappings     = true;
                 i++;
             }
         }
@@ -266,6 +272,13 @@ int main(int argc, char* argv[]) {
             events->FindPositionClusters_New();
             events->AssembleClusters(maxMappings);
         }
+        if (crumbs == false) {
+	   //we need to clean up
+	   events->RemoveMasterChromStrandFiles()
+	   events->RemovePositionSortedFiles()
+	   events->RemovePositionClusterFiles()
+        }
+        }
         return 0;
     }
     else {
@@ -317,7 +330,8 @@ void ShowHelp(void) {
     cerr << "  \t\"all\"\tUse all mappings for each pair." << endl;
     cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl;
     
-    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl 
+    cerr << "  -crumbs\tHydra will leave temporary files." << end << endl;
     
     // end the program here
     exit(1);
