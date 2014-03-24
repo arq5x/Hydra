@@ -339,7 +339,7 @@ void ShowHelp(void) {
     cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl;
     
     cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl; 
-    cerr << "  -crumbs\tHydra will leave temporary files." << end << endl;
+    cerr << "  -crumbs\tHydra will leave temporary files." << endl << endl;
     
     // end the program here
     exit(1);
