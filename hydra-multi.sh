@@ -72,7 +72,7 @@ function run() {
 		-o STR	The stub for the output file names"
 	}
 	
-	if [[ -z "$2" ]]; then
+	if [[ -z "$1" ]]; then
 		run_usage
 		exit 1
 	fi
