@@ -148,11 +148,11 @@ do
 done
 
 case "$1" in 
-	'test')
-		test "${@:2}"
-		;;
 	'run')
 		run "${@:2}"
+		;;
+	'test')
+		test "${@:2}"
 		;;
 	*)
 		usage
