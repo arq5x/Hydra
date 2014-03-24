@@ -126,8 +126,7 @@ function run() {
 	echo "done"
 }
 
-if test -z "$1"
-then
+if [ -z $1 ]; then
 	usage
 	exit 1
 fi
@@ -135,17 +134,17 @@ fi
 while getopts "K:h" OPTION
 do
 	case $OPTION in
-	h)
-		usage
-		exit 1
-		;;
-	K)
-		;;
-	?)
-		usage
-		exit 1
-		;;
-    esac
+		h)
+			usage
+			exit 1
+			;;
+		K)
+			;;
+		?)
+			usage
+			exit 1
+			;;
+	esac
 done
 
 case "$1" in 
