@@ -13,46 +13,46 @@ function usage()
 function test() {
 	PUNT=10
 	THREADS=2
-	echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
+	echo -e "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\n\c"
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00689/alignment/HG00689.chrom11.ILLUMINA.bwa.CHS.low_coverage.20120522.bam
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG01615/alignment/HG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam
 	echo "done"
 	
 	
-	echo "creating a basic configuration file from the downloaded 1000G files...\c"
+	echo -e "creating a basic configuration file from the downloaded 1000G files...\n\c"
 	echo -e "HG00096\tHG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
 	HG00689\tHG00689.chrom11.ILLUMINA.bwa.CHS.low_coverage.20120522.bam
 	HG01615\tHG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam" > config.stub.txt
 	echo "done"
 	
 	
-	echo "creating a complete configuration file by sampling BAM to create library stats...\c"
+	echo -e "creating a complete configuration file by sampling BAM to create library stats...\n\c"
 	make_hydra_config.py -i config.stub.txt > config.hydra.txt
 	echo "done"
 	
 	
-	echo "extracting discordant alignments from BAM files...\c"
+	echo -e "extracting discordant alignments from BAM files...\n\c"
 	extract_all_discordants.sh config.hydra.txt $THREADS
 	echo "done"
 	
 	
-	echo "running hydra router on the discordant alignments...\c"
+	echo -e "running hydra router on the discordant alignments...\n\c"
 	hydra-router -config config.hydra.txt -routedList routed-files.txt
 	echo "done"
 	
 	
-	echo "running hydra-assembler on the routed files of discordant alignments...\c"
+	echo -e "running hydra-assembler on the routed files of discordant alignments...\n\c"
 	assemble-routed-files.sh config.hydra.txt routed-files.txt $THREADS $PUNT
 	echo "done"
 	
 	
-	echo "re-combining the individual assembled files...\c"
+	echo -e "re-combining the individual assembled files...\n\c"
 	combine-assembled-files.sh   ./   all.1000G.assembled
 	echo "done"
 	
 	
-	echo "finalizing SV breakpoint calls...\c"
+	echo -e "finalizing SV breakpoint calls... \n\c"
 	finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
 	echo "done"
 }
@@ -96,7 +96,7 @@ function run() {
 		esac
 	done
 	
-	echo -e "creating a complete configuration file by sampling BAM to create library stats...\c"
+	echo -e "creating a complete configuration file by sampling BAM to create library stats...\n\c"
 	make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
 	
