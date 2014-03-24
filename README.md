@@ -21,9 +21,9 @@ For the human reference (hg19 b37), 16384 is the recommended ulimit.
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
-	chmod +x Hydra/scripts/*
-	sudo cp Hydra/scripts/* /usr/local/bin
-	sudo cp Hydra/bin/* /usr/local/bin
+	chmod +x scripts/*
+	sudo cp scripts/* /usr/local/bin
+	sudo cp bin/* /usr/local/bin
 
 ###Testing Hydra-Multi
 	chmod +x hydra-multi.sh
