@@ -174,7 +174,6 @@ int main(int argc, char* argv[]) {
                 maxMappings     = true;
                 i++;
             }
-        }
         else if(PARAMETER_CHECK("-is", 3, parameterLength)) {
             ignoreSize = true;
             cerr << "  Break cluster ties based on edit distance instead of size. " << endl;
