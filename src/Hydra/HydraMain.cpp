@@ -259,6 +259,7 @@ int main(int argc, char* argv[]) {
             events->RemovePositionSortedFiles();
             events->AssembleClusters(maxMappings);
             if (crumbs == false){
+            	cerr << "HERE?"
             	events->RemoveMasterChromStrandFiles();
             	events->RemovePositionSortedFiles();
            	events->RemovePositionClusterFiles();
