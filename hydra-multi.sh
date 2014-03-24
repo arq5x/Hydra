@@ -72,7 +72,7 @@ function run() {
 			-o STR	The stub for the output file names"
 	}
 	
-	if test -z "$2"; then
+	if [[ -z "$2" ]]; then
 		run_usage
 		exit 1
 	fi
@@ -131,14 +131,12 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
-while getopts "K:h" OPTION
+while getopts "h" OPTION
 do
 	case $OPTION in
 		h)
 			usage
 			exit 1
-			;;
-		K)
 			;;
 		?)
 			usage
@@ -152,7 +150,7 @@ case "$1" in
 		run "${@:2}"
 		;;
 	'test')
-		test "${@:2}"
+		test
 		;;
 	*)
 		usage
