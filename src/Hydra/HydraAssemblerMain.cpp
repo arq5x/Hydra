@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
     bool haveMaxLinkedDistance  = false;
     bool lumpInversions         = false;
     bool ignoreSize             = false;
+    bool crumbs                 = false;
 
     string mappingUsage         = "best";
     unsigned int editBeyondBest = 0;
@@ -110,6 +111,10 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+        else if(PARAMETER_CHECK("--crumbs", 8, parameterLength)) {
+            crumbs= true;
+            cerr << "  Leave crumbs (temp files). " << endl;
+	}
         else {
             cerr << "*****ERROR: Unrecognized parameter: " << argv[i] << " *****" << endl << endl;
             showHelp = true;
@@ -155,6 +160,11 @@ int main(int argc, char* argv[]) {
         events->SortAllMasterFilesByPosition_New();
         events->FindPositionClusters_New();
         events->AssembleClusters(maxMappings);
+        if (crumbs == false){
+            	events->RemoveMasterChromStrandFiles();
+            	events->RemovePositionSortedFiles();
+           	events->RemovePositionClusterFiles();
+        }
 
         return 0;
     }
@@ -183,7 +193,9 @@ void ShowHelp(void) {
     
     cerr << "  -routed\tA single routed chr/chr/strand/strand file from HydraRouter." << endl << endl;
         
-    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\"." << endl << endl;
+    cerr << "  --crumbs\tHydra will leave temporary files." << endl << endl;
+
         
     // end the program here
     exit(1);
