@@ -250,13 +250,13 @@ int main(int argc, char* argv[]) {
             cerr << "  Routing discordant mappings to master chrom/chrom/strand/strand files." << endl;  
             events->RouteDiscordantMappings();
             //events->SortAllMasterFilesByFragSize();
-            //events->RemoveMasterChromStrandFiles();
+            events->RemoveMasterChromStrandFiles();
             //events->FindFragSizeClusters();
             //events->RemoveFragSizeSortedFiles();
             events->SortAllMasterFilesByPosition_New();
             //events->RemoveFragSizeClusterFiles();
             events->FindPositionClusters_New();
-            //\events->RemovePositionSortedFiles();
+            events->RemovePositionSortedFiles();
             events->AssembleClusters(maxMappings);
             if (crumbs == false){
             	events->RemoveMasterChromStrandFiles();
