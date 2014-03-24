@@ -272,12 +272,7 @@ int main(int argc, char* argv[]) {
             events->FindPositionClusters_New();
             events->AssembleClusters(maxMappings);
         }
-        if (crumbs == false) {
-	   //we need to clean up
-	   events->RemoveMasterChromStrandFiles();
-	   events->RemovePositionSortedFiles();
-	   events->RemovePositionClusterFiles();
-        }
+    }
         return 0;
     }
     else {
