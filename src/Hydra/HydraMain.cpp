@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
             events->SortAllMasterFilesByPosition_New();
             //events->RemoveFragSizeClusterFiles();
             events->FindPositionClusters_New();
-            //events->RemovePositionSortedFiles();
+            //\events->RemovePositionSortedFiles();
             events->AssembleClusters(maxMappings);
         }
         else if (haveRoutedFiles == true && havePosSortedFiles == false) {
@@ -272,7 +272,11 @@ int main(int argc, char* argv[]) {
             events->FindPositionClusters_New();
             events->AssembleClusters(maxMappings);
         }
-    }
+        if (crumbs == false){
+            events->RemoveMasterChromStrandFiles();
+            events->RemovePositionSortedFiles();
+            events->RemovePositionClusterFiles();
+        }
         return 0;
     }
     else {
