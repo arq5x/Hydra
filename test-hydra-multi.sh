@@ -1,7 +1,7 @@
 echo "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\c"
-wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
-wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00419/alignment/HG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
-wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG01615/alignment/HG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam
+#wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
+#wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00419/alignment/HG00419.chrom11.ILLUMINA.bwa.CHS.low_coverage.20121211.bam
+#wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG01615/alignment/HG01615.chrom11.ILLUMINA.bwa.IBS.low_coverage.20120522.bam
 echo "done"
 
 
@@ -13,32 +13,37 @@ echo "done"
 
 
 echo "creating a complete configuration file by sampling BAM to create library stats...\c"
-python scripts/make_hydra_config.py -i config.stub.txt > config.hydra.txt
+make_hydra_config.py -i config.stub.txt > config.hydra.txt
 echo "done"
 
+wait
 
 echo "extracting discordant alignments from BAM files...\c"
-sh scripts/extract_all_discordants.sh config.hydra.txt 2
+extract_all_discordants.sh config.hydra.txt 2
 echo "done"
 
+wait
 
 echo "running hydra router on the discordant alignments...\c"
 hydra-router -config config.hydra.txt -routedList routed-files.txt
 echo "done"
 
+wait
 
 echo "running hydra-assembler on the routed files of discordant alignments...\c"
-sh scripts/assemble-routed-files.sh config.hydra.txt routed-files.txt
+assemble-routed-files.sh config.hydra.txt routed-files.txt
 echo "done"
 
+wait
 
 echo "re-combining the individual assembled files...\c"
-sh scripts/combine-assembled-files.sh   ./   all.1000G.assembled
+combine-assembled-files.sh   ./   all.1000G.assembled
 echo "done"
 
+wait
 
 echo "finalizing SV breakpoint calls...\c"
-python scripts/finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
+finalizeBreakpoints.py -i all.1000G.assembled -o all.1000G.sv
 echo "done"
 
 # final
