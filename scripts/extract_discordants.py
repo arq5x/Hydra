@@ -10,7 +10,7 @@ from optparse import OptionParser
 
 class BEDPE (object):
 
-    def __init__(self, bam1, bam2, bamfilehandle):
+    def __init__(self, bam1, bam2, bamfilehandle, datasetname):
         
         if ((bam1.tid == bam2.tid and bam2.pos < bam1.pos) or \
            (bam1.tid != bam2.tid and bam2.tid < bam1.tid)):
@@ -22,7 +22,7 @@ class BEDPE (object):
         self.c2        = bamfilehandle.getrname(bam2.tid)
         self.s2        = bam2.pos
         self.e2        = bam2.aend
-        self.name      = bam1.qname
+        self.name      = datasetname + "." + bam1.qname
         
         if bam1.is_read1:
             self.score     = 1
@@ -99,7 +99,7 @@ def parse_config(config):
 # 
 
 def make_discordant_bedpe(discordant_bam_filename, 
-                          min_mapq, max_edit, allow_dups):
+                          min_mapq, max_edit, allow_dups, dataset_name):
     
     orig_bam_filename = discordant_bam_filename
     idx = string.find(orig_bam_filename, ".disc.tmp.bam.qrysort.bam")
@@ -124,7 +124,7 @@ def make_discordant_bedpe(discordant_bam_filename,
                     break
         elif bam1.is_paired and bam2.is_paired and \
              not bam1.is_unmapped and not bam2.is_unmapped :
-            pair = BEDPE(bam1, bam2, bamfile)
+            pair = BEDPE(bam1, bam2, bamfile, dataset_name)
             
             if pair.mapq1 < min_mapq or pair.mapq2 < min_mapq:
                 continue
@@ -144,13 +144,19 @@ def make_discordant_bedpe(discordant_bam_filename,
 
 
 def main():
-    usage = """%prog -i <bam_file>
+    usage = """%prog -i <bam_file> -d <dataset_name>
     """
     parser = OptionParser(usage)
 
     parser.add_option("-i", dest="bam_file",
         help="Input BAM file",
         metavar="FILE")
+        
+    parser.add_option("-d", dest="dataset",
+        help="Dataset name",
+        metavar="FILE")
+
+
     
     parser.add_option("--min_mapq", dest="min_mapq",
         help="Minimum MAPQ required on both ends of a pair (def. 20)",
@@ -178,7 +184,8 @@ def main():
         discordant_bedpe = make_discordant_bedpe(opts.bam_file,
                                                  opts.min_mapq,
                                                  opts.max_edit,
-                                                 opts.allow_dups)
+                                                 opts.allow_dups,
+                                                 opts.dataset)
 
 
 if __name__ == "__main__":

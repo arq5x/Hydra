@@ -12,6 +12,8 @@ Author:         Aaron Quinlan, Ph.D
 #include <ctime>
 #include "Ancillary.h"
 #include "ExternalMergeSort.h"
+#include <sys/stat.h> 
+#include <fcntl.h>
 
 // make
 HydraPE::HydraPE(vector<DNALIB> libraries, string routedFileList,
@@ -370,16 +372,31 @@ ostream* HydraPE::GetMasterFileStream(const string &masterFileName, bool isIntra
 void HydraPE::WriteRoutedFiles(void)
 {
     ostream *output = new ofstream(_routedFileList.c_str(), ios::out);
-    
     map<string, ostream*>::const_iterator mapIter = _masterChromStrandFiles.begin();
     map<string, ostream*>::const_iterator mapEnd  = _masterChromStrandFiles.end();
-    // write the contents of the current buffer to the master file
-    for (; mapIter != mapEnd; ++mapIter) 
+    multimap<int, string> filemap;
+    // open each of the routed files and determine the order of assembly and store(largest to smallest bytes)              
+    for (; mapIter != mapEnd; ++mapIter)
     {
-        *output << mapIter->first << endl;
+      //fstat each file and store into map                                                                                                              
+      string filename;
+      int file = 0;
+      struct stat fileStat;
+      filename = mapIter->first;
+      file=open(filename.c_str(), O_RDONLY);
+      if (file != -1) {
+        fstat(file, &fileStat);
+	filemap.insert(pair<int,string>(fileStat.st_size,filename));
+	close(file);
+      }
+    }
+    //output route files to masterfile in largest to smallest byte size
+    multimap<int, string>::reverse_iterator ritr = filemap.rbegin();
+    multimap<int, string>::reverse_iterator rend = filemap.rend();
+    for (; ritr != rend; ++ritr)    {
+      *output <<  ritr->second << endl;
     }
 }
-
 bool HydraPE::IsInversionMapping(const CORE_PAIR &pair) {
     if (
         (pair.strand1 == "+" && pair.strand2 == "+") 
