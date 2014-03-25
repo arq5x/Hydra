@@ -11,6 +11,7 @@ function usage()
 }
 
 function test() {
+	#Assumed coverage of 10
 	PUNT=10
 	THREADS=2
 	echo -e "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\n\c"
@@ -79,7 +80,6 @@ function run() {
 	THREADS=2
 	PUNT=2
 	OUT="hydra"
-	STUB="${@:${OPTIND}:1}"
 	while getopts ":t:p:o:" OPTION
 	do
 		case "${OPTION}" in
@@ -96,6 +96,8 @@ function run() {
 		esac
 	done
 	
+	STUB="${@:${OPTIND}:1}"
+
 	echo -e "creating a complete configuration file by sampling BAM to create library stats...\n\c"
 	make_hydra_config.py -i $STUB > config.$OUT.txt
 	echo "done"
