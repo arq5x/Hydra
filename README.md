@@ -46,9 +46,19 @@ hydra-multi.sh can then then be used to execute subsequent steps:
 
 	./hydra-multi.sh run config.stub.txt
 
-To obtain a parameter list for running hydra-multi:
+To obtain a parameter list for using the run script:
 
-	./hydra-multi.sh run -h
+	$./hydra-multi.sh run -h
+	
+	usage:   hydra-multi.sh run [options] <stub_file>
+	
+	positional arguments:
+		stub file
+			the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
+	options:
+		-t INT	Number of threads to use. [Default: 2]
+		-p INT	The punt parameter for assembly, the maximum read depth allowed. [Default: 10]
+		-o STR	The stub for the output file names
 
 	
 ##Manual Execution 
