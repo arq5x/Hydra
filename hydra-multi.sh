@@ -2,7 +2,7 @@
 function usage()
 {
 	echo "
-	usage: hydra-multi.sh <command> [options]
+	usage: hydra-multi.sh <command> [options] <positional args>
 	command:
 	test	perform a test of Hydra-Multi using 3 sample 1000 Genomes datasets
 	run	execute Hydra-Multi
@@ -69,7 +69,8 @@ function run() {
 			the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
 	options:
 		-t INT	Number of threads to use. [Default: 2]
-		-p INT	The punt parameter for assembly, the maximum read depth allowed. [Default: 10]
+		-p INT	The punt parameter for breakpoint assembly. This value will be multiplied by the number of datasets in the analysis. 
+		        Recommended: The deepest (maximum) read coverage of all datasets analyzed. [Default: 10]
 		-o STR	The stub for the output file names"
 	}
 	
@@ -78,7 +79,7 @@ function run() {
 		exit 1
 	fi
 	THREADS=2
-	PUNT=2
+	PUNT=10
 	OUT="hydra"
 	while getopts ":t:p:o:" OPTION
 	do
@@ -89,6 +90,9 @@ function run() {
 				;;
 			t)
 				THREADS="$OPTARG"
+				;;
+			p)
+				PUNT="$OPTARG"
 				;;
 			o)
 				OUT="$OPTARG"
