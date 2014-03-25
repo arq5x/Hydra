@@ -108,7 +108,7 @@ file for the `sample1.pos.bam` input file listed in the config file:
 ###4. Assemble SV breakpoint clusters
 ==================================
 
-    $ sh scripts/assemble-routed-files.sh routed-files-test.txt config.hydra.txt
+    $ sh scripts/assemble-routed-files.sh routed-files-test.txt config.hydra.txt 1
 
 
 ###5. Combine the individual SV assembly files into a single file.
