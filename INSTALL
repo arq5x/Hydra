@@ -3,4 +3,5 @@ $ ls bin
 
 # Now copy the binaries to a directory in your PATH. e.g., 
 $ sudo cp bin/* /usr/local/bin
-# sudo cp scripts/* /usr/local/bin
+$ sudo chmod +x scripts/*
+$ sudo cp scripts/* /usr/local/bin

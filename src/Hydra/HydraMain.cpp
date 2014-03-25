@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
     bool haveMaxLinkedDistance  = false;
     bool lumpInversions         = false;
     bool ignoreSize             = false;
+    bool crumbs                 = false;
 
     string mappingUsage         = "best";
     unsigned int editBeyondBest = 0;
@@ -169,6 +170,11 @@ int main(int argc, char* argv[]) {
                 i++;
             }
         }
+	else if(PARAMETER_CHECK("--crumbs", 8, parameterLength)) {
+            crumbs= true;
+            cerr << "  Leave crumbs (temp files). " << endl;
+
+	}
         else if(PARAMETER_CHECK("-is", 3, parameterLength)) {
             ignoreSize = true;
             cerr << "  Break cluster ties based on edit distance instead of size. " << endl;
@@ -244,14 +250,19 @@ int main(int argc, char* argv[]) {
             cerr << "  Routing discordant mappings to master chrom/chrom/strand/strand files." << endl;  
             events->RouteDiscordantMappings();
             //events->SortAllMasterFilesByFragSize();
-            //events->RemoveMasterChromStrandFiles();
+            events->RemoveMasterChromStrandFiles();
             //events->FindFragSizeClusters();
             //events->RemoveFragSizeSortedFiles();
             events->SortAllMasterFilesByPosition_New();
             //events->RemoveFragSizeClusterFiles();
             events->FindPositionClusters_New();
-            //events->RemovePositionSortedFiles();
+            events->RemovePositionSortedFiles();
             events->AssembleClusters(maxMappings);
+            if (crumbs == false){
+            	events->RemoveMasterChromStrandFiles();
+            	events->RemovePositionSortedFiles();
+           	events->RemovePositionClusterFiles();
+            }
         }
         else if (haveRoutedFiles == true && havePosSortedFiles == false) {
             // sort, cluster and assemble
@@ -259,12 +270,22 @@ int main(int argc, char* argv[]) {
             events->SortAllMasterFilesByPosition_New();
             events->FindPositionClusters_New();
             events->AssembleClusters(maxMappings);
+            if (crumbs == false){
+            	events->RemoveMasterChromStrandFiles();
+            	events->RemovePositionSortedFiles();
+            	events->RemovePositionClusterFiles();
+	    }
         }
         else if (haveRoutedFiles == false && havePosSortedFiles == true) {
             // cluster and assemble
             events->LoadPosSortedFileList(posSortedFiles);
             events->FindPositionClusters_New();
             events->AssembleClusters(maxMappings);
+	    if (crumbs == false){
+            	events->RemoveMasterChromStrandFiles();
+            	events->RemovePositionSortedFiles();
+            	events->RemovePositionClusterFiles();
+	    }
         }
         return 0;
     }
@@ -315,9 +336,10 @@ void ShowHelp(void) {
     cerr << "  \t\"best\"\tUse the mappings with the least edit distance for each pair." << endl;
     cerr << "  \t\tDefault." << endl;
     cerr << "  \t\"all\"\tUse all mappings for each pair." << endl;
-    cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl;
+    cerr << "  \t<INT>\tUse the best plus those within <INT> edit distance of best." << endl << endl;
     
-    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\".." << endl << endl;
+    cerr << "  -maxMappings\tMaximum number of mappings in a cluster before Hydra will \"punt\"." << endl << endl; 
+    cerr << "  --crumbs\tHydra will leave temporary files." << endl << endl;
     
     // end the program here
     exit(1);

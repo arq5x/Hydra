@@ -458,7 +458,7 @@ def main():
         help="Master assembled cluster file", 
         metavar="FILE")
     parser.add_option("-o", dest="outStub", 
-        help="Stub fr output files", 
+        help="Stub for output files", 
         metavar="STRING")        
     parser.add_option("-m", action="store", type="string", dest="sortMemory", default="2G",
         help="The amount of memory to use for UNIX sort.  Default = 2G.  See \"man sort\" for valid values.", 
