@@ -20,7 +20,7 @@ The ulimit determines the number of open file handles on a system.
 This number must be larger than 4*number of possible chromosome-chromosome combinations in the respective reference.  
 For the human reference (hg19 b37), 16384 is the recommended ulimit.
 
-###Installaing
+###Installing
 	git clone https://github.com/arq5x/Hydra
 	cd Hydra
 	make 
