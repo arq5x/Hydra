@@ -30,7 +30,16 @@ if [[ -z "$3" ]]; then
 	for punted_file in $punted_file_list
 	do
     		`rm $punted_file`
+
+    	done
+fi
+
+if [[ -z "$3" ]]; then
+	echo -e  "\tCleaning up old files..."
+	for assembled_file in $assembled_file_list
+	do
 		`rm $assembled_file`
 
     	done
 fi
+
