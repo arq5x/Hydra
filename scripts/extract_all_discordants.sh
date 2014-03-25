@@ -28,6 +28,9 @@ function extract_discordants {
 	samtools view -bF 0x2 $1 > $1.disc.tmp.bam
 	samtools sort -m 1000000000 -n $1.disc.tmp.bam $1.disc.tmp.bam.qrysort
 	extract_discordants.py -i $1.disc.tmp.bam.qrysort.bam
+	# cleanup my mess
+	rm $1.disc.tmp.bam
+	rm $1.disc.tmp.bam.qrysort.bam
 }
 
 

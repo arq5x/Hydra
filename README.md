@@ -6,7 +6,6 @@ HydraMulti - an SV discovery tool that incorporates hundreds of samples
 1. samtools
 2. pysam
 
-
 1. Generate a config file.
 ==========================
 
