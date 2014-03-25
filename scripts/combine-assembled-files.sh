@@ -30,5 +30,7 @@ if [[ -z "$3" ]]; then
 	for punted_file in $punted_file_list
 	do
     		`rm $punted_file`
+		`rm $assembled_file`
+
     	done
 fi
