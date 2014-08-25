@@ -35,8 +35,8 @@ class BEDPE (object):
         self.edit2     = self.get_edit_distance(bam2)
         self.mappings1 = 1   # used to prioritize deduping.
         self.mappings2 = 1   # used to prioritize deduping.
-        self.mapq1     = bam1.mapq
-        self.mapq2     = bam2.mapq
+        self.mapq1     = int(bam1.mapq)
+        self.mapq2     = int(bam2.mapq)
         self.cigar1    = bam1.cigar
         self.cigar2    = bam2.cigar
         self.unmap1    = bam1.is_unmapped
@@ -126,10 +126,10 @@ def make_discordant_bedpe(discordant_bam_filename,
              not bam1.is_unmapped and not bam2.is_unmapped :
             pair = BEDPE(bam1, bam2, bamfile, dataset_name)
             
-            if pair.mapq1 < min_mapq or pair.mapq2 < min_mapq:
+            if int(pair.mapq1) < int(min_mapq) or int(pair.mapq2) < int(min_mapq):
                 continue
             
-            if pair.edit1 > max_edit or pair.edit2 > max_edit:
+            if int(pair.edit1) > int(max_edit) or int(pair.edit2) > int(max_edit):
                 continue
             
             if (bam1.is_unmapped and not allow_dups) or \
