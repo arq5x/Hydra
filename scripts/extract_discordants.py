@@ -110,8 +110,8 @@ def make_discordant_bam(bam, allow_dups, sampleName, expected, dev, numDev):
                 if (abs(aln.tlen) > expected + outDist):
                     tmp_bamfile.write(aln)
 				#is the alignment an insert?
-                elif (abs(aln.tlen) < expected - outDist):
-                    tmp_bamfile.write(aln)
+                #elif (abs(aln.tlen) < expected - outDist):
+                #    tmp_bamfile.write(aln)
                 else:
                         #in concordant range
                     continue
