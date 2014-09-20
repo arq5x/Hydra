@@ -3,7 +3,7 @@ Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 
 #Overview
 
-Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds of samples.
+Hydra-Multi is a paired-end read structural variant discovery tool that is capable of integrating signals from hundreds to thousands of samples.
 
 #Installation
 Below are the requirements and instructions for installation of Hydra-Multi. 
@@ -86,7 +86,7 @@ ready to go:
 
 ###2. Extract discordant alignments.
 =================================
-Once you have created a configuration file for HydraMulti, you need to run the
+Once you have created a configuration file for Hydra-Multi, you need to run the
 `extract_discordants.py` script to, you guessed it, extract the discordant 
 alignments from your BAM files into BEDPE format for HydaMulti.
 
@@ -107,12 +107,14 @@ This routes all of the alignments on with the same chromosome/orientation set to
 
 ###4. Assemble SV breakpoint clusters
 ==================================
+Assembly of each chromosome/orientation set.
 
     $ sh scripts/assemble-routed-files.sh routed-files-test.txt config.hydra.txt 1
 
 
 ###5. Combine the individual SV assembly files into a single file.
 ===============================================================
+Combine all of the chromosome/orientation sets back into one file.
 
     $ sh scripts/combine-assembled-files.sh /full/path/to/assembled/files/ all.assembled
 
