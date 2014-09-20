@@ -11,8 +11,8 @@ function usage()
 }
 
 function test() {
-	#Assumed coverage of 10
-	PUNT=50
+	#Assumed coverage of 30x
+	PUNT=150
 	THREADS=2
 	echo -e "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\n\c"
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
@@ -70,7 +70,7 @@ function run() {
 	options:
 		-t INT	Number of threads to use. [Default: 2]
 		-p INT	The punt parameter for breakpoint assembly. This value will be multiplied by the number of datasets in the analysis. 
-		        Recommended: The  average read coverage of all datasets analyzed multipled by 5. For 10x datasets, this is 50. [Default: 50]
+		        Recommended: The  average read coverage of all datasets analyzed multipled by 5. For 30x datasets, this is 150. [Default: 50]
 		-o STR	The stub for the output file names"
 	}
 	
@@ -79,7 +79,7 @@ function run() {
 		exit 1
 	fi
 	THREADS=2
-	PUNT=50
+	PUNT=150
 	OUT="hydra"
 	while getopts ":t:p:o:" OPTION
 	do
