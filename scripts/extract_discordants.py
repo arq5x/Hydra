@@ -129,7 +129,7 @@ def query_sort_discordant(bam_filename, mem):
     return query_sort_filename + ".bam"
 
 def make_discordant_bedpe(discordant_bam_filename, 
-	                          min_mapq, max_edit, dataset_name):
+	                          min_mapq, dataset_name):
 	
 	orig_bam_filename = discordant_bam_filename
 	idx = string.find(orig_bam_filename, ".disc.tmp.bam.qrysort.bam")
@@ -158,8 +158,6 @@ def make_discordant_bedpe(discordant_bam_filename,
 			if int(pair.mapq1) < int(min_mapq) or int(pair.mapq2) < int(min_mapq):
 				continue
 	        
-			if int(pair.edit1) > int(max_edit) or int(pair.edit2) > int(max_edit):
-				continue
 			bedpe_outfile.write(str(pair) + '\n')
 	
 	bedpe_outfile.close()
@@ -180,9 +178,6 @@ def main():
     parser.add_option("--min_mapq", dest="min_mapq",
         help="Minimum MAPQ required on both ends of a pair (def. 0)",
         metavar="INT", default=0)  
-    parser.add_option("--max_edit", dest="max_edit",
-        help="Maximum edit distance allowed on both ends of a pair (def. 100)",
-        metavar="INT", default=100)
     parser.add_option('--allow_dups', dest="allow_dups",
         help="Allow duplicate pairs (def. False)",
         action="store_true", default=False)
@@ -209,7 +204,6 @@ def main():
 		
         discordant_bedpe = make_discordant_bedpe(discordant_bam_query_sort,
 		opts.min_mapq,
-		opts.max_edit,
 		sample)
 
 
