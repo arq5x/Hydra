@@ -95,7 +95,7 @@ For each inout BAM file listed in your configuration file,
 in the the same directory.  For example, it will create a `sample1.pos.bam.bedpe` 
 file for the `sample1.pos.bam` input file listed in the config file:
 
-    python scripts/extract_discordants.py -i config.hydra.txt
+    python scripts/extract_discordants.py -c config.hydra.txt -d <sample_name>
 
 
 ###3. Run HydraRouter
