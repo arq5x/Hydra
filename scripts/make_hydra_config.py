@@ -54,8 +54,8 @@ def main():
         help="How many pairs to sample (def. 100000)",
         metavar="INT", type="int", default=100000)
     parser.add_option("-n", dest="num_variance_units",
-        help="The num. of units of variation that should be allowed (def. 20)",
-        metavar="INT", type="int", default=20)
+        help="The num. of units of variation that should be allowed (def. 8)",
+        metavar="INT", type="int", default=8)
 
 
     # Grab the command line options
