@@ -131,7 +131,7 @@ Combine all of the chromosome/orientation sets back into one file.
     $ scripts/frequency.py -f all.sv-calls.final -d all.sv-calls.detail > all.sv-calls.freq
     
     
-###6. Change footprint intervals into breakpoint intervals.
+###8. Change footprint intervals into breakpoint intervals.
 ===============================================================
 
     $ scripts/hydraToBreakpoint -i all.sv-calls.freq >  all.sv-calls.bkpts
