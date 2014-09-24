@@ -123,3 +123,16 @@ Combine all of the chromosome/orientation sets back into one file.
 ===============================================================
 
     $ scripts/forceOneClusterPerPairMem.py -i all.assembled -o all.sv-calls
+
+
+###7. Determine presence of the SV breakpoint predictions in samples.
+=======================================================================
+
+    $ scripts/frequency.py -f all.sv-calls.final -d all.sv-calls.detail > all.sv-calls.freq
+    
+    
+###6. Change footprint intervals into breakpoint intervals.
+===============================================================
+
+    $ scripts/hydraToBreakpoint -i all.sv-calls.freq >  all.sv-calls.bkpts
+    
