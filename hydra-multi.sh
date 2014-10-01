@@ -4,7 +4,7 @@ function usage()
 	echo "
 	usage: hydra-multi.sh <command> [options] <positional args>
 	command:
-	test	perform a test of Hydra-Multi using 3 sample 1000 Genomes datasets
+	test	perform a test of Hydra-Multi using 3 samples from 1000 Genomes datasets
 	run	execute Hydra-Multi
 	options: -h	show this help
 "
