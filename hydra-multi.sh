@@ -66,11 +66,15 @@ function run() {
 	
 	positional arguments:
 		stub file
-			the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
+			the stub file to create the configuration file. 
+			Example: found on https://github.com/arq5x/Hydra
 	options:
 		-t INT	Number of threads to use. [Default: 2]
-		-p INT	The punt parameter for breakpoint assembly. This value will be multiplied by the number of datasets in the analysis. 
-		        Recommended: The  average read coverage of all datasets analyzed multipled by 5. For 30x datasets, this is 150. [Default: 50]
+		-p INT	The punt parameter for breakpoint assembly. 
+			This value will be multiplied by the number of datasets in the analysis. 
+		        Recommended: The  average read coverage of all datasets analyzed multipled by 5. 
+		        Example: 3 Datasets average 30x, the input value is 150. 
+		        The default assumes 10x datasets [Default: 50]
 		-o STR	The stub for the output file names"
 	}
 	
@@ -79,7 +83,7 @@ function run() {
 		exit 1
 	fi
 	THREADS=2
-	PUNT=150
+	PUNT=50
 	OUT="hydra"
 	while getopts ":t:p:o:" OPTION
 	do
