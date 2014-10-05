@@ -4,15 +4,15 @@ function usage()
 	echo "
 	usage: hydra-multi.sh <command> [options] <positional args>
 	command:
-	test	perform a test of Hydra-Multi using 3 sample 1000 Genomes datasets
+	test	perform a test of Hydra-Multi using 3 samples from 1000 Genomes datasets
 	run	execute Hydra-Multi
 	options: -h	show this help
 "
 }
 
 function test() {
-	#Assumed coverage of 10
-	PUNT=10
+	#Assumed coverage of 30x
+	PUNT=150
 	THREADS=2
 	echo -e "Downloading 3 sample files from 1000 Genomes (~1.5Gb total)...\n\c"
 	wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/data/HG00096/alignment/HG00096.chrom11.ILLUMINA.bwa.GBR.low_coverage.20120522.bam
@@ -66,11 +66,15 @@ function run() {
 	
 	positional arguments:
 		stub file
-			the stub file to create the configuration file, example on https://github.com/arq5x/Hydra
+			the stub file to create the configuration file. 
+			Example: found on https://github.com/arq5x/Hydra
 	options:
 		-t INT	Number of threads to use. [Default: 2]
-		-p INT	The punt parameter for breakpoint assembly. This value will be multiplied by the number of datasets in the analysis. 
-		        Recommended: The deepest (maximum) read coverage of all datasets analyzed. [Default: 10]
+		-p INT	The punt parameter for breakpoint assembly. 
+			This value will be multiplied by the number of datasets in the analysis. 
+		        Recommended: The  average read coverage of all datasets analyzed multipled by 5. 
+		        Example: 3 Datasets average 30x, the input value is 150. 
+		        The default assumes 10x datasets [Default: 50]
 		-o STR	The stub for the output file names"
 	}
 	
@@ -79,7 +83,7 @@ function run() {
 		exit 1
 	fi
 	THREADS=2
-	PUNT=10
+	PUNT=50
 	OUT="hydra"
 	while getopts ":t:p:o:" OPTION
 	do

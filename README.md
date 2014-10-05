@@ -3,6 +3,7 @@ Hydra-Multi - an SV discovery tool that incorporates hundreds of samples
 
 #Overview
 
+
 1. Generate a config file.
 ==========================
 =======
@@ -89,43 +90,35 @@ ready to go:
 
 ###2. Extract discordant alignments.
 =================================
-Once you have created a configuration file for HydraMulti, you need to run the
+Once you have created a configuration file for Hydra-Multi, you need to run the
 `extract_discordants.py` script to, you guessed it, extract the discordant 
 alignments from your BAM files into BEDPE format for HydaMulti.
-
-NOTE: the `extract_discordants.py` script inspects the is_proper_pair bit (0x2)
-in the SAM FLAG field to identify discordant alignments.  If you want to use 
-other rules for discordancy, you will need to write a script to set the FLAG
-according to your custom rules.
-
-By default, `extract_discordants.py` requires both ends of a pair to be aligned,
-have MAPQ >= 20, and requires both ends of a pair to have an edit distance of at
-most 4.  Moreover, it filters out any alignments marked as duplicates.  One can
-override these settings with the `--min_mapq`, `--max_edit`, and `--allow_dups`
-options, respectively.
 
 For each inout BAM file listed in your configuration file, 
 `extract_discordants.py` will create a BEDPE file of the discordant alignments
 in the the same directory.  For example, it will create a `sample1.pos.bam.bedpe` 
 file for the `sample1.pos.bam` input file listed in the config file:
 
-    python scripts/extract_discordants.py -i config.hydra.txt
+    python scripts/extract_discordants.py -c config.hydra.txt -d <sample_name>
 
 
 ###3. Run HydraRouter
 =================================
+This routes all of the alignments on with the same chromosome/orientation set to the same file for assembly.
 
     $ hydra-router -config config.hydra.txt -routedList routed-files.txt
 
 
 ###4. Assemble SV breakpoint clusters
 ==================================
+Assembly of each chromosome/orientation set.
 
     $ sh scripts/assemble-routed-files.sh routed-files-test.txt config.hydra.txt 1
 
 
 ###5. Combine the individual SV assembly files into a single file.
 ===============================================================
+Combine all of the chromosome/orientation sets back into one file.
 
     $ sh scripts/combine-assembled-files.sh /full/path/to/assembled/files/ all.assembled
 
@@ -134,3 +127,16 @@ file for the `sample1.pos.bam` input file listed in the config file:
 ===============================================================
 
     $ scripts/forceOneClusterPerPairMem.py -i all.assembled -o all.sv-calls
+
+
+###7. Determine presence of the SV breakpoint predictions in samples.
+=======================================================================
+
+    $ scripts/frequency.py -f all.sv-calls.final -d all.sv-calls.detail > all.sv-calls.freq
+    
+    
+###8. Change footprint intervals into breakpoint intervals.
+===============================================================
+
+    $ scripts/hydraToBreakpoint -i all.sv-calls.freq >  all.sv-calls.bkpts
+    
