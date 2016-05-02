@@ -126,7 +126,7 @@ def query_sort_discordant(bam_filename, mem):
     query_sort_filename = bam_filename + ".qrysort"
     sortCmd = "samtools sort -n -m " + str(mem) + " " + bam_filename + " " + query_sort_filename
     subprocess.call(shlex.split(sortCmd))
-    os.remove(bam_filename)
+    #os.remove(bam_filename)
     return query_sort_filename + ".bam"
 
 def make_discordant_bedpe(discordant_bam_filename, 
