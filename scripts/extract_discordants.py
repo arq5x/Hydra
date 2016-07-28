@@ -123,11 +123,11 @@ def make_discordant_bam(bam, allow_dups, sampleName, expected, dev, numDev):
     return tmp_bam_file_name
 
 def query_sort_discordant(bam_filename, mem):
-    query_sort_filename = bam_filename + ".qrysort"
-    sortCmd = "samtools sort -n -m " + str(mem) + " " + bam_filename + " " + query_sort_filename
+    query_sort_filename = bam_filename + ".qrysort" + ".bam"
+    sortCmd = "samtools sort -n -m " + str(mem) + " " + bam_filename + " -o " + query_sort_filename
     subprocess.call(shlex.split(sortCmd))
     os.remove(bam_filename)
-    return query_sort_filename + ".bam"
+    return query_sort_filename
 
 def make_discordant_bedpe(discordant_bam_filename, 
 	                          min_mapq, dataset_name):
